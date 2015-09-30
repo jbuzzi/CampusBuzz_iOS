@@ -7,9 +7,11 @@
 //
 
 #import "CBRegistartionTableViewController.h"
+#import "MBProgressHUD.h"
 
-@interface CBRegistartionTableViewController ()
+@interface CBRegistartionTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIImageView *userImageView;
 @property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
@@ -19,6 +21,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *createButton;
 @property (weak, nonatomic) IBOutlet UIButton *securePasswordButton;
 
+@property (strong, nonatomic) NSData *imageData;
+@property (strong, nonatomic) NSArray *fieldArray;
+
 @end
 
 @implementation CBRegistartionTableViewController
@@ -26,6 +31,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.firstNameTextField.delegate = self;
+    self.lastNameTextField.delegate = self;
+    self.emailTextField.delegate = self;
+    self.usernameTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    self.fieldArray = [NSArray arrayWithObjects: self.firstNameTextField, self.lastNameTextField, self.emailTextField, self.usernameTextField, self.passwordTextField, nil];
+    
+    self.userImageView.layer.masksToBounds = YES;
     self.userImageView.layer.cornerRadius = self.userImageView.frame.size.height/2;
     self.createButton.layer.cornerRadius = 5.0f;
 }
@@ -38,11 +51,116 @@
 }
 
 - (IBAction)createPressed:(id)sender {
+    [self.firstNameTextField resignFirstResponder];
+    [self.lastNameTextField resignFirstResponder];
+    [self.emailTextField resignFirstResponder];
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
     
+    NSString * firstName = [self.firstNameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * lastName = [self.lastNameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * email = [self.emailTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * username = [self.usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * password = [self.passwordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (!firstName.length || !lastName.length || !email.length || !username.length || !password.length) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"All fields must be complete" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else if (![self validateEmail:email]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Invalid email address. Make sure you use a school email (.edu)" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else if (password.length < 8) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Password is too short. Must be 8 characters minimum" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else if (!self.imageData) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"A profile picture is required. Take a picture or select an existing one" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"Creating Account";
+        
+        PFUser *user = [PFUser user];
+        user.username = username;
+        user.email = email;
+        user.password = password;
+        [user setObject:firstName forKey:@"firstName"];
+        [user setObject:lastName forKey:@"lastName"];
+        if (self.imageData) {
+            PFFile *imageFile = [PFFile fileWithName:@"user_image.png" data:self.imageData];
+            [user setObject:imageFile forKey:@"image"];
+        }
+        
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+            if (!error) {
+                NSLog(@"User registration successful");
+                [self performSegueWithIdentifier:@"Enter" sender:self];
+            } else {
+                NSString *errorString = [NSString stringWithFormat:@"%@%@",[[error.localizedDescription substringToIndex:1] uppercaseString],[error.localizedDescription substringFromIndex:1]];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:errorString preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                    [alert dismissViewControllerAnimated:YES completion:nil];
+                }];
+                [alert addAction:ok];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }];
+    }
 }
 
 - (IBAction)addImagePressed:(id)sender {
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *camera = [UIAlertAction actionWithTitle:@"Take a new photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+        {
+            UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+            controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+            controller.allowsEditing = YES;
+            controller.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypeCamera];
+            controller.delegate = self;
+            [self.navigationController presentViewController:controller animated: YES completion: nil];
+        }
+    }];
+    UIAlertAction *library = [UIAlertAction actionWithTitle:@"Choose from existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+        {
+            UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+            controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            controller.allowsEditing = YES;
+            controller.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypePhotoLibrary];
+            controller.delegate = self;
+            [self.navigationController presentViewController:controller animated: YES completion: nil];
+        }
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction:camera];
+    [alert addAction:library];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)securePasswordPressed:(id)sender {
@@ -61,7 +179,12 @@
     if (![emailTest evaluateWithObject:email]) {
         return NO;
     } else {
-        return YES;
+        NSString * edu = [email substringFromIndex:email.length - 3];
+        if ([edu isEqualToString:@"edu"]) {
+            return YES;
+        } else {
+            return NO;
+        }
     }
 }
 
@@ -100,14 +223,43 @@
     return 0;
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - UIImagePickerControllerDelegate
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [self.navigationController dismissViewControllerAnimated: YES completion: nil];
+    UIImage *image = [info valueForKey:UIImagePickerControllerEditedImage];
+    self.imageData = UIImagePNGRepresentation(image);
+    [self.imageButton setImage:nil forState:UIControlStateNormal];
+    [self.userImageView setImage:image];
 }
-*/
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker; {
+    [self.navigationController dismissViewControllerAnimated: YES completion: nil];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    BOOL didResign = [textField resignFirstResponder];
+    if (!didResign) return NO;
+    
+    NSUInteger index = [self.fieldArray indexOfObject:textField];
+    if (index == NSNotFound || index + 1 == self.fieldArray.count) return NO;
+    
+    id nextField = [self.fieldArray objectAtIndex:index + 1];
+    [nextField becomeFirstResponder];
+    
+    return NO;
+}
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

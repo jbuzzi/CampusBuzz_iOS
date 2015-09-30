@@ -34,7 +34,29 @@
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
+    [self.emailTextFields resignFirstResponder];
     
+    NSString * email = [self.emailTextFields.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    [PFUser requestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Done!" message:[NSString stringWithFormat:@"Instructions to reset you password have been sent to %@", email] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            NSString *errorString = [NSString stringWithFormat:@"%@%@",[[error.localizedDescription substringToIndex:1] uppercaseString],[error.localizedDescription substringFromIndex:1]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:errorString preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+            }];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }];
 }
 
 #pragma mark - Table view data source

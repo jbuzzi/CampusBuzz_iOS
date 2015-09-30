@@ -57,7 +57,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yLZ-Rc-d0m">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -78,13 +78,12 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ejF-lE-4BL">
                                                     <rect key="frame" x="20" y="8" width="437" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kpe-cL-MS7">
                                                     <rect key="frame" x="465" y="14" width="115" height="30"/>
                                                     <state key="normal" title="Forgot Password"/>
                                                     <connections>
-                                                        <action selector="forgotPasswordPressed:" destination="hhf-cW-g90" eventType="touchUpInside" id="pVR-Tx-Vwb"/>
                                                         <segue destination="9be-Cj-9OW" kind="show" id="UCK-vi-dCb"/>
                                                     </connections>
                                                 </button>
@@ -128,7 +127,6 @@
                                                     </constraints>
                                                     <state key="normal" title="Create a New Account"/>
                                                     <connections>
-                                                        <action selector="createAccountPressed:" destination="hhf-cW-g90" eventType="touchUpInside" id="nNG-iX-Nl9"/>
                                                         <segue destination="v9y-Pn-G8b" kind="show" id="5eq-Sw-JcQ"/>
                                                     </connections>
                                                 </button>
@@ -285,19 +283,19 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IQb-Ae-2bW">
                                                     <rect key="frame" x="250" y="8.5" width="99.5" height="99.5"/>
-                                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="99.5" id="5I7-8q-U9U"/>
                                                         <constraint firstAttribute="height" constant="99.5" id="djy-WR-NoW"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIG-5B-wPY">
-                                                    <rect key="frame" x="250" y="8" width="99.5" height="99.5"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIG-5B-wPY">
+                                                    <rect key="frame" x="250" y="8.5" width="99.5" height="99"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="99.5" id="OFB-qe-qGZ"/>
                                                         <constraint firstAttribute="height" constant="99.5" id="g1L-DC-3n3"/>
                                                     </constraints>
-                                                    <state key="normal" title="Add Image"/>
+                                                    <state key="normal" image="camera"/>
                                                     <connections>
                                                         <action selector="addImagePressed:" destination="v9y-Pn-G8b" eventType="touchUpInside" id="9PQ-ux-a7e"/>
                                                     </connections>
@@ -321,7 +319,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rTw-eh-ZvH">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -342,7 +340,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lff-v0-2m5">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -363,7 +361,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mza-YK-eJ2">
                                                     <rect key="frame" x="20" y="8.5" width="560" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -384,7 +382,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCF-KI-ZWF">
                                                     <rect key="frame" x="20" y="7.5" width="560" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -405,7 +403,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L5Y-1Q-Q7b">
                                                     <rect key="frame" x="20" y="7.5" width="510" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMj-Eh-Gqk">
                                                     <rect key="frame" x="538" y="14" width="38" height="30"/>
@@ -488,6 +486,7 @@
                         <outlet property="createButton" destination="1dE-sa-EJL" id="fmw-uf-ALf"/>
                         <outlet property="emailTextField" destination="Mza-YK-eJ2" id="fyU-Th-B50"/>
                         <outlet property="firstNameTextField" destination="rTw-eh-ZvH" id="Klg-Gr-xFe"/>
+                        <outlet property="imageButton" destination="OIG-5B-wPY" id="qkf-dR-YhZ"/>
                         <outlet property="lastNameTextField" destination="Lff-v0-2m5" id="kuJ-53-rCv"/>
                         <outlet property="passwordTextField" destination="L5Y-1Q-Q7b" id="ejl-As-jcO"/>
                         <outlet property="securePasswordButton" destination="HMj-Eh-Gqk" id="KP5-MR-cJU"/>
@@ -527,7 +526,10 @@
             <point key="canvasLocation" x="1858" y="725"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="camera" width="50" height="50"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kUA-MT-Ehq"/>
+        <segue reference="YbF-Ft-8s6"/>
     </inferredMetricsTieBreakers>
 </document>
