@@ -7,12 +7,15 @@
 //
 
 #import "CBSignInTableViewController.h"
+#import "MBProgressHUD.h"
 
-@interface CBSignInTableViewController ()
+@interface CBSignInTableViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
+
+@property (strong, nonatomic) NSArray *fieldArray;
 
 @end
 
@@ -20,6 +23,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.usernameTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    self.fieldArray = [NSArray arrayWithObjects:self.usernameTextField, self.passwordTextField, nil];
 
     self.signInButton.layer.cornerRadius = 5.0f;
 }
@@ -32,15 +39,42 @@
 }
 
 - (IBAction)signInPressed:(id)sender {
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
     
-}
+    NSString * username = [self.usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * password = [self.passwordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (!username.length || !password.length) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"All fields must be complete" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"";
+        [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+            if (user) {
+                NSLog(@"User sign in successful");
+                [self performSegueWithIdentifier:@"Enter" sender:self];
+            } else {
+                NSString *errorString = [NSString stringWithFormat:@"%@%@",[[error.localizedDescription substringToIndex:1] uppercaseString],[error.localizedDescription substringFromIndex:1]];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:errorString preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                    [alert dismissViewControllerAnimated:YES completion:nil];
+                }];
+                [alert addAction:ok];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }];
 
-- (IBAction)forgotPasswordPressed:(id)sender {
-    
-}
-
-- (IBAction)createAccountPressed:(id)sender {
-    
+    }
 }
 
 #pragma mark - Table view data source
@@ -70,6 +104,21 @@
     }
     
     return 0;
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    BOOL didResign = [textField resignFirstResponder];
+    if (!didResign) return NO;
+    
+    NSUInteger index = [self.fieldArray indexOfObject:textField];
+    if (index == NSNotFound || index + 1 == self.fieldArray.count) return NO;
+    
+    id nextField = [self.fieldArray objectAtIndex:index + 1];
+    [nextField becomeFirstResponder];
+    
+    return NO;
 }
 
 /*
