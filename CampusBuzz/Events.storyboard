@@ -7,7 +7,7 @@
         <!--Events-->
         <scene sceneID="JVj-eD-UBD">
             <objects>
-                <viewController id="Ao1-b7-GFe" sceneMemberID="viewController">
+                <viewController id="Ao1-b7-GFe" customClass="CBEventFeedViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Hkg-tT-Jp9"/>
                         <viewControllerLayoutGuide type="bottom" id="eIN-Yq-k9U"/>
@@ -20,14 +20,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="gAV-VC-o14">
-                                    <rect key="frame" x="0.0" y="64" width="600" height="60"/>
+                                    <rect key="frame" x="0.0" y="64" width="600" height="64"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q1h-S4-FHx">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q1h-S4-FHx">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                         </scrollView>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="q1h-S4-FHx" secondAttribute="bottom" id="EuI-s8-kHI"/>
                                         <constraint firstAttribute="trailing" secondItem="q1h-S4-FHx" secondAttribute="trailing" id="MWF-KK-KT2"/>
@@ -37,7 +36,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="f99-cQ-NnR">
-                                        <rect key="frame" x="0.0" y="152" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="156" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f99-cQ-NnR" id="1mt-cd-9IA">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -59,6 +58,9 @@
                         <barButtonItem key="leftBarButtonItem" title="Add" id="U3a-Fd-Kyf"/>
                         <barButtonItem key="rightBarButtonItem" title="Profile" id="nhb-yL-AjZ"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="filtersScrollView" destination="q1h-S4-FHx" id="g9R-ub-Kjx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mqf-ru-XTQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
