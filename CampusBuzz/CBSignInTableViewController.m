@@ -24,6 +24,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:self.view.window];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:self.view.window];
+    
     self.usernameTextField.delegate = self;
     self.passwordTextField.delegate = self;
     self.fieldArray = [NSArray arrayWithObjects:self.usernameTextField, self.passwordTextField, nil];
@@ -77,6 +81,12 @@
     }
 }
 
+- (void)scrollToTheBottom:(BOOL)animated
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -109,16 +119,32 @@
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    BOOL didResign = [textField resignFirstResponder];
-    if (!didResign) return NO;
-    
     NSUInteger index = [self.fieldArray indexOfObject:textField];
-    if (index == NSNotFound || index + 1 == self.fieldArray.count) return NO;
+    if (index == NSNotFound || index + 1 == self.fieldArray.count) {
+        [textField resignFirstResponder];
+        return NO;
+    }
     
     id nextField = [self.fieldArray objectAtIndex:index + 1];
     [nextField becomeFirstResponder];
     
     return NO;
+}
+
+#pragma mark - Keyboard Show/Hide
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    // When keyboard shows scroll to bottom of screen
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self scrollToTheBottom:YES];
+    });
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    // When keyboard hides scroll to bottom of screen
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self scrollToTheBottom:YES];
+    });
 }
 
 /*

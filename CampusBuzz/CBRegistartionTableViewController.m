@@ -21,7 +21,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *createButton;
 @property (weak, nonatomic) IBOutlet UIButton *securePasswordButton;
 
-@property (strong, nonatomic) NSData *imageData;
 @property (strong, nonatomic) NSArray *fieldArray;
 
 @end
@@ -87,7 +86,7 @@
         [alert addAction:ok];
         
         [self presentViewController:alert animated:YES completion:nil];
-    } else if (!self.imageData) {
+    } else if (!self.userImageView.image) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"A profile picture is required. Take a picture or select an existing one" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -105,8 +104,10 @@
         user.password = password;
         [user setObject:firstName forKey:@"firstName"];
         [user setObject:lastName forKey:@"lastName"];
-        if (self.imageData) {
-            PFFile *imageFile = [PFFile fileWithName:@"user_image.png" data:self.imageData];
+        
+        if (self.userImageView.image) {
+            NSData *imageData = UIImageJPEGRepresentation(self.userImageView.image, 0.5f);
+            PFFile *imageFile = [PFFile fileWithName:@"user_image.jpg" data:imageData];
             [user setObject:imageFile forKey:@"image"];
         }
         
@@ -228,7 +229,6 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.navigationController dismissViewControllerAnimated: YES completion: nil];
     UIImage *image = [info valueForKey:UIImagePickerControllerEditedImage];
-    self.imageData = UIImagePNGRepresentation(image);
     [self.imageButton setImage:nil forState:UIControlStateNormal];
     [self.userImageView setImage:image];
 }
