@@ -166,10 +166,10 @@
 
 - (IBAction)securePasswordPressed:(id)sender {
     if (self.passwordTextField.isSecureTextEntry) {
-        [self.securePasswordButton setTitle:@"Hide" forState:UIControlStateNormal];
+        [self.securePasswordButton setImage:[UIImage imageNamed:@"visible"] forState:UIControlStateNormal];
         [self.passwordTextField setSecureTextEntry:NO];
     } else {
-        [self.securePasswordButton setTitle:@"Show" forState:UIControlStateNormal];
+        [self.securePasswordButton setImage:[UIImage imageNamed:@"invisible"] forState:UIControlStateNormal];
         [self.passwordTextField setSecureTextEntry:YES];
     }
 }

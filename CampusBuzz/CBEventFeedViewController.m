@@ -12,6 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *filtersScrollView;
 
+@property (strong, nonatomic) NSArray *categoriesImage;
+
 @end
 
 @implementation CBEventFeedViewController
@@ -19,6 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.categoriesImage = [NSArray arrayWithObjects:@"study", @"sports", @"music", @"party", @"science", @"conference", @"theater", @"volunteering", @"religion", @"fundraiser", nil];
     [self createScrollMenu];
 }
 
@@ -29,14 +32,13 @@
 
 - (void)createScrollMenu {
     int x = 5;
-    for (int i = 0; i < 10; i++) {
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, 5, 54, 54)];
-        [button setBackgroundColor:[UIColor greenColor]];
+    for (int i = 0; i < self.categoriesImage.count; i++) {
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, 5, 64, 64)];
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
         button.layer.cornerRadius = button.frame.size.height/2;
-        [button setTitle:[NSString stringWithFormat:@"B %d", i] forState:UIControlStateNormal];
-        
+        [button setImage:[UIImage imageNamed:[self.categoriesImage objectAtIndex:i]] forState:UIControlStateNormal];
         [self.filtersScrollView addSubview:button];
-        
+    
         x += button.frame.size.width + 5;
     }
     
