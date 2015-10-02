@@ -56,7 +56,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yLZ-Rc-d0m">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
@@ -77,7 +77,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ejF-lE-4BL">
                                                     <rect key="frame" x="20" y="8" width="437" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kpe-cL-MS7">
@@ -113,7 +113,7 @@
                                                         <constraint firstAttribute="height" constant="50" id="fQu-3W-f3g"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                    <state key="normal" title="Sign In">
+                                                    <state key="normal" title="SIGN IN">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -201,7 +201,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="N8m-D4-7Mc">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                             </subviews>
@@ -227,7 +227,7 @@
                                                         <constraint firstAttribute="height" constant="50" id="N9T-tK-PIA"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                    <state key="normal" title="Send">
+                                                    <state key="normal" title="SEND">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -318,7 +318,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rTw-eh-ZvH">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
@@ -339,7 +339,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lff-v0-2m5">
                                                     <rect key="frame" x="20" y="8" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
@@ -360,7 +360,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mza-YK-eJ2">
                                                     <rect key="frame" x="20" y="8.5" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
@@ -381,7 +381,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCF-KI-ZWF">
                                                     <rect key="frame" x="20" y="7.5" width="560" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
@@ -401,13 +401,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L5Y-1Q-Q7b">
-                                                    <rect key="frame" x="20" y="7.5" width="510" height="43.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <rect key="frame" x="20" y="7.5" width="512" height="43.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMj-Eh-Gqk">
-                                                    <rect key="frame" x="538" y="14" width="38" height="30"/>
-                                                    <state key="normal" title="Show"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMj-Eh-Gqk">
+                                                    <rect key="frame" x="540" y="10" width="40" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="128-Fd-53D"/>
+                                                        <constraint firstAttribute="width" constant="40" id="SAp-dd-oE2"/>
+                                                    </constraints>
+                                                    <state key="normal" image="invisible"/>
                                                     <connections>
                                                         <action selector="securePasswordPressed:" destination="v9y-Pn-G8b" eventType="touchUpInside" id="xdw-Ow-tET"/>
                                                     </connections>
@@ -416,12 +420,24 @@
                                             <constraints>
                                                 <constraint firstItem="L5Y-1Q-Q7b" firstAttribute="top" secondItem="2Y8-aU-wiw" secondAttribute="top" constant="8" id="7Vb-4I-wGs"/>
                                                 <constraint firstItem="HMj-Eh-Gqk" firstAttribute="leading" secondItem="L5Y-1Q-Q7b" secondAttribute="trailing" constant="8" id="E71-s1-xYb"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="HMj-Eh-Gqk" secondAttribute="trailing" constant="16" id="Iwo-ve-6Sx"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="HMj-Eh-Gqk" secondAttribute="bottom" constant="7.5" id="cJb-f1-6pl"/>
+                                                <constraint firstAttribute="trailing" secondItem="HMj-Eh-Gqk" secondAttribute="trailing" constant="20" id="G5i-aP-kmW"/>
+                                                <constraint firstItem="HMj-Eh-Gqk" firstAttribute="leading" secondItem="L5Y-1Q-Q7b" secondAttribute="trailing" constant="8" id="HZn-KU-8HP"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="HMj-Eh-Gqk" secondAttribute="trailing" constant="12" id="Iwo-ve-6Sx"/>
+                                                <constraint firstItem="HMj-Eh-Gqk" firstAttribute="top" secondItem="2Y8-aU-wiw" secondAttribute="top" constant="10" id="bqj-rK-bdt"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="HMj-Eh-Gqk" secondAttribute="bottom" constant="0.5" id="cJb-f1-6pl"/>
                                                 <constraint firstItem="L5Y-1Q-Q7b" firstAttribute="leading" secondItem="2Y8-aU-wiw" secondAttribute="leading" constant="20" id="pjB-Tq-TWT"/>
-                                                <constraint firstItem="HMj-Eh-Gqk" firstAttribute="top" secondItem="2Y8-aU-wiw" secondAttribute="topMargin" constant="6" id="rZj-t5-Ro5"/>
+                                                <constraint firstItem="HMj-Eh-Gqk" firstAttribute="top" secondItem="2Y8-aU-wiw" secondAttribute="topMargin" constant="3" id="rZj-t5-Ro5"/>
                                                 <constraint firstAttribute="bottom" secondItem="L5Y-1Q-Q7b" secondAttribute="bottom" constant="8" id="uMO-gV-31X"/>
+                                                <constraint firstAttribute="bottom" secondItem="HMj-Eh-Gqk" secondAttribute="bottom" constant="9.5" id="ux4-fy-P4O"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="E71-s1-xYb"/>
+                                                    <exclude reference="Iwo-ve-6Sx"/>
+                                                    <exclude reference="cJb-f1-6pl"/>
+                                                    <exclude reference="rZj-t5-Ro5"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="120" id="OLR-ff-QgN">
@@ -439,7 +455,7 @@
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="zS3-FX-rbT"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                    <state key="normal" title="Create">
+                                                    <state key="normal" title="CREATE">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -528,6 +544,7 @@
     </scenes>
     <resources>
         <image name="camera" width="50" height="50"/>
+        <image name="invisible" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="YbF-Ft-8s6"/>
