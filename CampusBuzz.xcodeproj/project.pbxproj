@@ -11,6 +11,10 @@
 		745EE0931BBB0F1100854153 /* Events.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 745EE0921BBB0F1100854153 /* Events.storyboard */; settings = {ASSET_TAGS = (); }; };
 		747F7FB81BBC7BC100FC4FB9 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 747F7FB71BBC7BC100FC4FB9 /* MBProgressHUD.m */; settings = {ASSET_TAGS = (); }; };
 		747F7FBB1BBDF5E700FC4FB9 /* CBEventFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 747F7FBA1BBDF5E700FC4FB9 /* CBEventFeedViewController.m */; settings = {ASSET_TAGS = (); }; };
+		747F7FC11BBF13D500FC4FB9 /* CBAddEventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 747F7FC01BBF13D500FC4FB9 /* CBAddEventTableViewController.m */; settings = {ASSET_TAGS = (); }; };
+		747F7FC51BBF22B300FC4FB9 /* UIColor+AppColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 747F7FC41BBF22B300FC4FB9 /* UIColor+AppColors.m */; settings = {ASSET_TAGS = (); }; };
+		74BE4DC31BCD9C9200F5AFD4 /* SchoolColor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */; settings = {ASSET_TAGS = (); }; };
+		74BE4DC41BCD9C9200F5AFD4 /* SchoolList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */; settings = {ASSET_TAGS = (); }; };
 		74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */; settings = {ASSET_TAGS = (); }; };
 		74D308DF1BBAE9E9008736B4 /* CBSignInTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DD1BBAE9E9008736B4 /* CBSignInTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 		74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308E11BBAFC37008736B4 /* CBRegistartionTableViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -54,6 +58,12 @@
 		747F7FB71BBC7BC100FC4FB9 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		747F7FB91BBDF5E700FC4FB9 /* CBEventFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBEventFeedViewController.h; sourceTree = "<group>"; };
 		747F7FBA1BBDF5E700FC4FB9 /* CBEventFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBEventFeedViewController.m; sourceTree = "<group>"; };
+		747F7FBF1BBF13D500FC4FB9 /* CBAddEventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAddEventTableViewController.h; sourceTree = "<group>"; };
+		747F7FC01BBF13D500FC4FB9 /* CBAddEventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAddEventTableViewController.m; sourceTree = "<group>"; };
+		747F7FC31BBF22B300FC4FB9 /* UIColor+AppColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AppColors.h"; sourceTree = "<group>"; };
+		747F7FC41BBF22B300FC4FB9 /* UIColor+AppColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AppColors.m"; sourceTree = "<group>"; };
+		74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolColor.plist; sourceTree = "<group>"; };
+		74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolList.plist; sourceTree = "<group>"; };
 		74D308DA1BBAE9E9008736B4 /* CBRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBRootViewController.h; sourceTree = "<group>"; };
 		74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBRootViewController.m; sourceTree = "<group>"; };
 		74D308DC1BBAE9E9008736B4 /* CBSignInTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSignInTableViewController.h; sourceTree = "<group>"; };
@@ -136,6 +146,15 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		747F7FC21BBF229500FC4FB9 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				747F7FC31BBF22B300FC4FB9 /* UIColor+AppColors.h */,
+				747F7FC41BBF22B300FC4FB9 /* UIColor+AppColors.m */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 		74D308D81BBAE98D008736B4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +168,8 @@
 				745EE0901BBB0C1900854153 /* CBResetPasswordTableViewController.m */,
 				747F7FB91BBDF5E700FC4FB9 /* CBEventFeedViewController.h */,
 				747F7FBA1BBDF5E700FC4FB9 /* CBEventFeedViewController.m */,
+				747F7FBF1BBF13D500FC4FB9 /* CBAddEventTableViewController.h */,
+				747F7FC01BBF13D500FC4FB9 /* CBAddEventTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -187,6 +208,7 @@
 				74D308D81BBAE98D008736B4 /* ViewControllers */,
 				74D308D91BBAE9B2008736B4 /* Storyboards */,
 				747F7FB41BBC7BAC00FC4FB9 /* Third Party */,
+				747F7FC21BBF229500FC4FB9 /* Helper */,
 				74FAC8DE1BBA29D300524E19 /* Supporting Files */,
 			);
 			path = CampusBuzz;
@@ -195,6 +217,8 @@
 		74FAC8DE1BBA29D300524E19 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */,
+				74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */,
 				74FAC8E21BBA29D300524E19 /* CBAppDelegate.h */,
 				74FAC8E31BBA29D300524E19 /* CBAppDelegate.m */,
 				74FAC8EB1BBA29D300524E19 /* Images.xcassets */,
@@ -325,10 +349,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74BE4DC41BCD9C9200F5AFD4 /* SchoolList.plist in Resources */,
 				74FAC8EA1BBA29D300524E19 /* Login.storyboard in Resources */,
 				745EE0931BBB0F1100854153 /* Events.storyboard in Resources */,
 				74FAC8EF1BBA29D300524E19 /* LaunchScreen.xib in Resources */,
 				74FAC8EC1BBA29D300524E19 /* Images.xcassets in Resources */,
+				74BE4DC31BCD9C9200F5AFD4 /* SchoolColor.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +377,9 @@
 				74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */,
 				74FAC8E41BBA29D300524E19 /* CBAppDelegate.m in Sources */,
 				745EE0911BBB0C1900854153 /* CBResetPasswordTableViewController.m in Sources */,
+				747F7FC51BBF22B300FC4FB9 /* UIColor+AppColors.m in Sources */,
 				74FAC8E11BBA29D300524E19 /* main.m in Sources */,
+				747F7FC11BBF13D500FC4FB9 /* CBAddEventTableViewController.m in Sources */,
 				74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */,
 				747F7FB81BBC7BC100FC4FB9 /* MBProgressHUD.m in Sources */,
 			);

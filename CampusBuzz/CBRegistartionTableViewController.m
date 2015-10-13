@@ -98,12 +98,20 @@
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"Creating Account";
         
+        NSString *emailDomain = [email substringFromIndex:[email rangeOfString:@"@"].location+1];
+        emailDomain = [emailDomain substringToIndex:[emailDomain rangeOfString:@"."].location];
+        
+        NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolList" ofType:@"plist"];
+        NSDictionary *schoolDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+        NSString *schoolName = [schoolDictionary objectForKey:emailDomain];
+        
         PFUser *user = [PFUser user];
         user.username = username;
         user.email = email;
         user.password = password;
         [user setObject:firstName forKey:@"firstName"];
         [user setObject:lastName forKey:@"lastName"];
+        [user setObject:schoolName forKey:@"school"];
         
         if (self.userImageView.image) {
             NSData *imageData = UIImageJPEGRepresentation(self.userImageView.image, 0.5f);
