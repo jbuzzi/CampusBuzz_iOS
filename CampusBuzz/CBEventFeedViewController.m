@@ -7,10 +7,13 @@
 //
 
 #import "CBEventFeedViewController.h"
+#import "UIColor+AppColors.h"
+#import <Parse/Parse.h>
 
 @interface CBEventFeedViewController ()
 
 @property (weak, nonatomic) IBOutlet UIScrollView *filtersScrollView;
+@property (strong, nonatomic) UIColor *mainColor;
 
 @property (strong, nonatomic) NSArray *categoriesImage;
 
@@ -21,13 +24,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    //Set school color
+    NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
+    NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    self.mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
+    
+    self.navigationController.navigationBar.barTintColor = self.mainColor;
+    
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
     self.categoriesImage = [NSArray arrayWithObjects:@"study", @"sports", @"music", @"party", @"science", @"conference", @"theater", @"volunteering", @"religion", @"fundraiser", nil];
     [self createScrollMenu];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)createScrollMenu {
