@@ -7,6 +7,7 @@
 //
 
 #import "CBResetPasswordTableViewController.h"
+#import "UIColor+AppColors.h"
 
 @interface CBResetPasswordTableViewController ()
 
@@ -19,6 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.emailTextFields.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"School Email" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
     
     self.sendButton.layer.cornerRadius = 5.0f;
     

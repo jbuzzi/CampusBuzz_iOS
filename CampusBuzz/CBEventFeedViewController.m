@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *filtersScrollView;
 @property (strong, nonatomic) UIColor *mainColor;
 
+@property (strong, nonatomic) UIView *selectedView;
 @property (strong, nonatomic) NSArray *categoriesImage;
 
 @end
@@ -47,18 +48,28 @@
 }
 
 - (void)createScrollMenu {
-    int x = 5;
+    int x = 0;
     for (int i = 0; i < self.categoriesImage.count; i++) {
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, 5, 64, 64)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, 0, 64, 64)];
         [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
         button.layer.cornerRadius = button.frame.size.height/2;
         [button setImage:[UIImage imageNamed:[self.categoriesImage objectAtIndex:i]] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(categoryPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self.filtersScrollView addSubview:button];
     
-        x += button.frame.size.width + 5;
+        x += button.frame.size.width;
     }
     
     self.filtersScrollView.contentSize = CGSizeMake(x, self.filtersScrollView.frame.size.height);
+    self.filtersScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+}
+
+- (void)categoryPressed:(UIButton *)sender {
+    [self.selectedView removeFromSuperview];
+    
+    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, sender.frame.size.height-5, sender.frame.size.width, 5)];
+    self.selectedView.backgroundColor = self.mainColor;
+    [sender addSubview:self.selectedView];
 }
 
 /*
