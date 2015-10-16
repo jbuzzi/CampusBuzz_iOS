@@ -7,6 +7,7 @@
 //
 
 #import "CBRegistartionTableViewController.h"
+#import "UIColor+AppColors.h"
 #import "MBProgressHUD.h"
 
 @interface CBRegistartionTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
@@ -29,6 +30,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.firstNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"First Name" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
+    self.lastNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Last Name" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
+    self.emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"School Email" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
+    self.usernameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Username" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
+    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
     
     self.firstNameTextField.delegate = self;
     self.lastNameTextField.delegate = self;

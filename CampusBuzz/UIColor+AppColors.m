@@ -40,5 +40,9 @@
     return [self colorFromHexString:@"BBBAC2"];
 }
 
++ (UIColor *) CBGrayColor {
+    return [self colorFromHexString:@"888888"];
+}
+
 
 @end
