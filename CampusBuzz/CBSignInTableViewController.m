@@ -7,6 +7,7 @@
 //
 
 #import "CBSignInTableViewController.h"
+#import "UIColor+AppColors.h"
 #import "MBProgressHUD.h"
 
 @interface CBSignInTableViewController () <UITextFieldDelegate>
@@ -27,6 +28,9 @@
     // Register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:self.view.window];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:self.view.window];
+    
+    self.usernameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Username" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
+    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
     
     self.usernameTextField.delegate = self;
     self.passwordTextField.delegate = self;

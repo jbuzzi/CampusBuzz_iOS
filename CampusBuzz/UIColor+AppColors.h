@@ -12,5 +12,6 @@
 + (UIColor *) colorFromHexString:(NSString *)hexString;
 + (UIColor *) CBBlueColor;
 + (UIColor *) CBLightGrayColor;
++ (UIColor *) CBGrayColor;
 
 @end
