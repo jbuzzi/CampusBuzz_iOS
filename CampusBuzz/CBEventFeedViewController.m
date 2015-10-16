@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *filtersScrollView;
 @property (strong, nonatomic) UIColor *mainColor;
 
+@property (strong, nonatomic) UIButton *selectedButton;
 @property (strong, nonatomic) UIView *selectedView;
 @property (strong, nonatomic) NSArray *categoriesImage;
 
@@ -30,7 +31,9 @@
     //Set school color
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
-    self.mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
+    NSString *schoolName = [[PFUser currentUser] objectForKey:@"school"];
+    NSString *colorHex = [colorDictionary objectForKey:schoolName];
+    self.mainColor = [UIColor colorFromHexString:colorHex];
     
     self.navigationController.navigationBar.barTintColor = self.mainColor;
     
@@ -65,11 +68,16 @@
 }
 
 - (void)categoryPressed:(UIButton *)sender {
+    [self.selectedButton setSelected:NO];
     [self.selectedView removeFromSuperview];
     
-    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, sender.frame.size.height-5, sender.frame.size.width, 5)];
-    self.selectedView.backgroundColor = self.mainColor;
-    [sender addSubview:self.selectedView];
+    if (!sender.isSelected) {
+        self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, sender.frame.size.height-5, sender.frame.size.width, 5)];
+        self.selectedView.backgroundColor = self.mainColor;
+        [sender setSelected:YES];
+        self.selectedButton = sender;
+        [sender addSubview:self.selectedView];
+    }
 }
 
 /*
