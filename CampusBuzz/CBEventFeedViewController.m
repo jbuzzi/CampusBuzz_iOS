@@ -7,6 +7,7 @@
 //
 
 #import "CBEventFeedViewController.h"
+#import "CBSignInTableViewController.h"
 #import "UIColor+AppColors.h"
 #import <Parse/Parse.h>
 
@@ -78,6 +79,14 @@
         self.selectedButton = sender;
         [sender addSubview:self.selectedView];
     }
+}
+
+- (IBAction)logOut:(id)sender {
+    [PFUser logOut];
+    
+    UIStoryboard *secondStoryBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UIViewController *theTabBar = (UIViewController *)[secondStoryBoard instantiateViewControllerWithIdentifier:@"login"];
+    [self.navigationController pushViewController:theTabBar animated:YES];
 }
 
 /*

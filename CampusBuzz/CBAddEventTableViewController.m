@@ -104,6 +104,7 @@
         event[@"address"] = address;
         event[@"city"] = city;
         event[@"zipcode"] = zipcode;
+        event[@"school"] = [[PFUser currentUser] objectForKey:@"school"];
         
         if (self.eventImageView.image) {
             NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);
@@ -120,21 +121,55 @@
             NSLog(@"Latitude %f", coordinate.latitude);
             NSLog(@"Longitude %f", coordinate.longitude);
             
-            event[@"state"] = placemark.administrativeArea;
+            if (placemark) {
+                event[@"state"] = placemark.administrativeArea;
             
-            PFGeoPoint *locationPoint =  [PFGeoPoint geoPointWithLocation:location];
-            event[@"locationPoint"] = locationPoint;
-            
-            [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                PFGeoPoint *locationPoint =  [PFGeoPoint geoPointWithLocation:location];
+                event[@"locationPoint"] = locationPoint;
+                
+                [[PFUser currentUser] fetch];
+                if ([[[PFUser currentUser] objectForKey:@"emailVerified"] boolValue]) {
+                    [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        });
+                        if (succeeded) {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Event Created!" message:@"Congrats, your event has been created and added to your school events." preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                [self.navigationController popViewControllerAnimated:YES];
+                            }];
+                            [alert addAction:ok];
+                            [self presentViewController:alert animated:YES completion:nil];
+                        } else {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"There was an error adding your event." preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                [self.navigationController popViewControllerAnimated:YES];
+                            }];
+                            [alert addAction:ok];
+                            [self presentViewController:alert animated:YES completion:nil];
+                        }
+                    }];
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    });
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Email must be verify before you can post events in your school. Please check your inbox or spam folder and verify your account." preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                    }];
+                    [alert addAction:ok];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+                
+            } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                 });
-                if (succeeded) {
-                    // The object has been saved.
-                } else {
-                    // There was a problem, check error.description
-                }
-            }];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Address not found, make sure the address is correct." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                }];
+                [alert addAction:ok];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
         }];
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"All fields must be completed" preferredStyle:UIAlertControllerStyleAlert];

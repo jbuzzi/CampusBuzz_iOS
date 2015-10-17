@@ -204,6 +204,10 @@
     }
 }
 
+- (IBAction)backgroundTap:(id)sender {
+    [self.view endEditing:YES];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -277,7 +281,4 @@
  }
  */
 
-- (IBAction)backgroundTap:(id)sender {
-    [self.view endEditing:YES];
-}
 @end
