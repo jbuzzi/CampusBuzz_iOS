@@ -45,6 +45,19 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sTp-6h-T9V" id="b62-Yq-tpu">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="Csa-ui-eBt">
+                                                    <rect key="frame" x="200" y="-1" width="200" height="200"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="200" id="55Z-2a-3cw"/>
+                                                        <constraint firstAttribute="height" constant="200" id="c0Q-eD-bFm"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Csa-ui-eBt" firstAttribute="centerY" secondItem="b62-Yq-tpu" secondAttribute="centerY" id="IIK-wt-gpF"/>
+                                                <constraint firstItem="Csa-ui-eBt" firstAttribute="centerX" secondItem="b62-Yq-tpu" secondAttribute="centerX" id="eOF-Un-DtE"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <gestureRecognizers/>
                                         <connections>
@@ -563,6 +576,7 @@
     <resources>
         <image name="camera" width="50" height="50"/>
         <image name="invisible" width="64" height="64"/>
+        <image name="logo" width="504" height="504"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="YbF-Ft-8s6"/>
