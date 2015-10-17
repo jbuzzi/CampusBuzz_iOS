@@ -6,5 +6,47 @@
 	<string>Boston University</string>
 	<key>bc</key>
 	<string>Boston College</string>
+    <key>princeton</key>
+    <string>Princeton University</string>
+    <key>harvard</key>
+    <string>Harvard University</string>
+    <key>yale</key>
+    <string>Yale University</string>
+    <key>columbia</key>
+    <string>Columbia University</string>
+    <key>stanford</key>
+    <string>Stanford University</string>
+    <key>uchicago</key>
+    <string>University of Chicago</string>
+    <key>mit</key>
+    <string>Massachusetts Institute of Technology</string>
+    <key>duke</key>
+    <string>Duke University</string>
+    <key>upenn</key>
+    <string>University of Pennsylvania</string>
+    <key>caltech</key>
+    <string>California Institute of Technology</string>
+    <key>jhu</key>
+    <string>Johns Hopkins University</string>
+    <key>dartmouth</key>
+    <string>Dartmouth College</string>
+    <key>northwestern</key>
+    <string>Northwestern University</string>
+    <key>brown</key>
+    <string>Brown University</string>
+    <key>cornell</key>
+    <string>Cornell University</string>
+    <key>vanderbilt</key>
+    <string>Vanderbilt University</string>
+    <key>rice</key>
+    <string>Rice University</string>
+    <key>nd</key>
+    <string>University of Notre Dame</string>
+    <key>emory</key>
+    <string>Emory University</string>
+    <key>georgetown</key>
+    <string>Georgetown University</string>
+    <key>cmu</key>
+    <string>Carnegie Mellon University</string>
 </dict>
 </plist>

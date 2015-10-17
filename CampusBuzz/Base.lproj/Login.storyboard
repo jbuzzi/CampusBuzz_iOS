@@ -16,7 +16,20 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="u4C-Y3-6jY">
+                                <rect key="frame" x="200" y="200" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="0vj-Tx-SuA"/>
+                                    <constraint firstAttribute="height" constant="200" id="X8w-60-46l"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="u4C-Y3-6jY" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="cD2-mH-x1C"/>
+                            <constraint firstItem="u4C-Y3-6jY" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" id="x1R-QS-5lq"/>
+                        </constraints>
                     </view>
                     <connections>
                         <segue destination="ZRC-Tg-U5K" kind="show" identifier="SignIn" id="lsg-s8-ppl"/>
@@ -579,6 +592,6 @@
         <image name="logo" width="504" height="504"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="YbF-Ft-8s6"/>
+        <segue reference="kUA-MT-Ehq"/>
     </inferredMetricsTieBreakers>
 </document>
