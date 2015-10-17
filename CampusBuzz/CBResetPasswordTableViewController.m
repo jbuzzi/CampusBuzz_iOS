@@ -43,7 +43,7 @@
     
     [PFUser requestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
         if (!error) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Done!" message:[NSString stringWithFormat:@"Instructions to reset you password have been sent to %@", email] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Done!" message:[NSString stringWithFormat:@"Instructions to reset your password have been sent to %@", email] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
                 [alert dismissViewControllerAnimated:YES completion:nil];
                 [self.navigationController popViewControllerAnimated:YES];
