@@ -32,9 +32,10 @@
     //Set school color
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
-    NSString *schoolName = [[PFUser currentUser] objectForKey:@"school"];
-    NSString *colorHex = [colorDictionary objectForKey:schoolName];
-    self.mainColor = [UIColor colorFromHexString:colorHex];
+    self.mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
+    if (!self.mainColor) {
+        self.mainColor = [UIColor CBBlueColor];
+    }
     
     self.navigationController.navigationBar.barTintColor = self.mainColor;
     

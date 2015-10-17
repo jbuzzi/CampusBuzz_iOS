@@ -41,6 +41,9 @@
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
     UIColor * mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
+    if (mainColor) {
+       mainColor = [UIColor CBBlueColor];
+    }
     
     self.titleTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Event Title" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
     self.dateTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"When" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
