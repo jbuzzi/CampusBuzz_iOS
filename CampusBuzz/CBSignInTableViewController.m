@@ -42,6 +42,13 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(247/255.0) green:(247/255.0) blue:(247/255.0) alpha:1];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor CBBlueColor];
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     // Hide navigation bar
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
 }
@@ -89,6 +96,10 @@
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+}
+
+- (IBAction)backgroundTap:(id)sender {
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Table view data source
@@ -161,7 +172,4 @@
 }
 */
 
-- (IBAction)backgroundTap:(id)sender {
-    [self.view endEditing:YES];
-}
 @end

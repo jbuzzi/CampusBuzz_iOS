@@ -32,6 +32,12 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(247/255.0) green:(247/255.0) blue:(247/255.0) alpha:1];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor CBBlueColor];
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    
     // Show navigation bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
 }
@@ -43,7 +49,7 @@
     
     [PFUser requestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
         if (!error) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Done!" message:[NSString stringWithFormat:@"Instructions to reset you password have been sent to %@", email] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Done!" message:[NSString stringWithFormat:@"Instructions to reset your password have been sent to %@", email] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
                 [alert dismissViewControllerAnimated:YES completion:nil];
                 [self.navigationController popViewControllerAnimated:YES];
