@@ -11,4 +11,6 @@
 
 @interface CBSignInTableViewController : UITableViewController
 
+- (IBAction)backgroundTap:(id)sender;
+
 @end

@@ -11,4 +11,6 @@
 
 @interface CBRegistartionTableViewController : UITableViewController
 
+- (IBAction)backgroundTap:(id)sender;
+
 @end
