@@ -41,9 +41,6 @@
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
     UIColor * mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
-    if (mainColor) {
-       mainColor = [UIColor CBBlueColor];
-    }
     
     self.titleTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Event Title" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
     self.dateTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"When" attributes:@{NSForegroundColorAttributeName:[UIColor CBGrayColor]}];
@@ -69,7 +66,7 @@
     [datePicker setMinimumDate:currentDate];
     self.dateTextField.inputView = datePicker;
     
-    self.categoties = @[@"Academic", @"Sports", @"Music", @"Parties", @"Science", @"Conferences", @"Theater", @"Volunteering", @"Religion", @"Fundraisers", @"Clubs", ];
+    self.categoties = @[@"Academic", @"Alumni", @"Art", @"Careers", @"Clubs", @"Concerts", @"Conferences", @"Dance", @"Film", @"Food", @"Fundraisers", @"Lectures", @"Meetings", @"Parties", @"Religious", @"Science", @"Special Interest", @"Sports", @"Study Abroad", @"Theater", @"Volunteering"];
     UIPickerView *categoryPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 216)];
     categoryPicker.dataSource = self;
     categoryPicker.delegate = self;

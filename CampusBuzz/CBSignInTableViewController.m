@@ -47,6 +47,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor CBBlueColor];
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     // Hide navigation bar
     [[self navigationController] setNavigationBarHidden:YES animated:YES];

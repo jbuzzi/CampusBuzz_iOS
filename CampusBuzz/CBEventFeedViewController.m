@@ -33,9 +33,6 @@
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
     self.mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
-    if (!self.mainColor) {
-        self.mainColor = [UIColor CBBlueColor];
-    }
     
     self.navigationController.navigationBar.barTintColor = self.mainColor;
     
@@ -43,8 +40,9 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    self.categoriesImage = [NSArray arrayWithObjects:@"study", @"sports", @"music", @"party", @"science", @"conference", @"theater", @"volunteering", @"religion", @"fundraiser", nil];
+    self.categoriesImage = @[@"Academic", @"Alumni", @"Art", @"Careers", @"Clubs", @"Concerts", @"Conferences", @"Dance", @"Film", @"Food", @"Fundraisers", @"Lectures", @"Meetings", @"Parties", @"Religious", @"Science", @"Special Interest", @"Sports", @"Study Abroad", @"Theater", @"Volunteering"];
     [self createScrollMenu];
 }
 
@@ -56,6 +54,7 @@
     int x = 0;
     for (int i = 0; i < self.categoriesImage.count; i++) {
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, 0, 64, 64)];
+        button.tag = i;
         [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
         button.layer.cornerRadius = button.frame.size.height/2;
         [button setImage:[UIImage imageNamed:[self.categoriesImage objectAtIndex:i]] forState:UIControlStateNormal];
@@ -70,15 +69,23 @@
 }
 
 - (void)categoryPressed:(UIButton *)sender {
-    [self.selectedButton setSelected:NO];
-    [self.selectedView removeFromSuperview];
-    
-    if (!sender.isSelected) {
+    if (sender.isSelected) {
+        [self.selectedView removeFromSuperview];
+        [sender setSelected:NO];
+        self.selectedButton = nil;
+        self.title = @"Events";
+    } else {
+        //Deselect previous
+        [self.selectedButton setSelected:NO];
+        [self.selectedView removeFromSuperview];
+        
+        //Select new one
         self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, sender.frame.size.height-5, sender.frame.size.width, 5)];
         self.selectedView.backgroundColor = self.mainColor;
+        [sender addSubview:self.selectedView];
         [sender setSelected:YES];
         self.selectedButton = sender;
-        [sender addSubview:self.selectedView];
+        self.title = [self.categoriesImage objectAtIndex:sender.tag];
     }
 }
 
