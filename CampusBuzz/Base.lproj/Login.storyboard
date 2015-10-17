@@ -46,6 +46,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="TTt-7C-HTG" appends="YES" id="oP9-4a-Szk"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="eHD-BE-1Z2">
                                         <rect key="frame" x="0.0" y="264" width="600" height="60"/>
@@ -157,6 +161,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KJQ-Cx-v02" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="TTt-7C-HTG">
+                    <connections>
+                        <action selector="backgroundTap:" destination="hhf-cW-g90" id="vFl-WA-PgL"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1858" y="292"/>
         </scene>
@@ -308,6 +317,10 @@
                                                 <constraint firstItem="OIG-5B-wPY" firstAttribute="centerX" secondItem="gsg-En-qa5" secondAttribute="centerX" id="qbB-Pd-Tvy"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="dWu-en-C5n" appends="YES" id="W11-sF-imE"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="vgx-rp-7f2">
                                         <rect key="frame" x="0.0" y="180" width="600" height="60"/>
@@ -512,6 +525,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2JH-Yf-rT8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="dWu-en-C5n">
+                    <connections>
+                        <action selector="backgroundTap:" destination="v9y-Pn-G8b" id="Mij-8N-2my"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2571" y="292"/>
         </scene>
