@@ -340,7 +340,11 @@
                                 <segue destination="AFQ-j4-Goq" kind="show" id="ExY-Ye-QdK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="user" id="nhb-yL-AjZ"/>
+                        <barButtonItem key="rightBarButtonItem" image="user" id="nhb-yL-AjZ">
+                            <connections>
+                                <action selector="logOut:" destination="Ao1-b7-GFe" id="YPg-Dn-xdI"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>

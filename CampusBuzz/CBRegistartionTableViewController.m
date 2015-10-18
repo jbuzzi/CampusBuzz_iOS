@@ -112,37 +112,48 @@
         NSDictionary *schoolDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
         NSString *schoolName = [schoolDictionary objectForKey:emailDomain];
         
-        PFUser *user = [PFUser user];
-        user.username = username;
-        user.email = email;
-        user.password = password;
-        [user setObject:firstName forKey:@"firstName"];
-        [user setObject:lastName forKey:@"lastName"];
-        [user setObject:schoolName forKey:@"school"];
-        
-        if (self.userImageView.image) {
-            NSData *imageData = UIImageJPEGRepresentation(self.userImageView.image, 0.5f);
-            PFFile *imageFile = [PFFile fileWithName:@"user_image.jpg" data:imageData];
-            [user setObject:imageFile forKey:@"image"];
-        }
-        
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (schoolName.length) {
+            PFUser *user = [PFUser user];
+            user.username = username;
+            user.email = email;
+            user.password = password;
+            [user setObject:firstName forKey:@"firstName"];
+            [user setObject:lastName forKey:@"lastName"];
+            [user setObject:schoolName forKey:@"school"];
+            
+            if (self.userImageView.image) {
+                NSData *imageData = UIImageJPEGRepresentation(self.userImageView.image, 0.5f);
+                PFFile *imageFile = [PFFile fileWithName:@"user_image.jpg" data:imageData];
+                [user setObject:imageFile forKey:@"image"];
+            }
+            
+            [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                });
+                if (!error) {
+                    NSLog(@"User registration successful");
+                    [self performSegueWithIdentifier:@"Enter" sender:self];
+                } else {
+                    NSString *errorString = [NSString stringWithFormat:@"%@%@",[[error.localizedDescription substringToIndex:1] uppercaseString],[error.localizedDescription substringFromIndex:1]];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:errorString preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                        [alert dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    [alert addAction:ok];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+            }];
+        } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
             });
-            if (!error) {
-                NSLog(@"User registration successful");
-                [self performSegueWithIdentifier:@"Enter" sender:self];
-            } else {
-                NSString *errorString = [NSString stringWithFormat:@"%@%@",[[error.localizedDescription substringToIndex:1] uppercaseString],[error.localizedDescription substringFromIndex:1]];
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:errorString preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                    [alert dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [alert addAction:ok];
-                [self presentViewController:alert animated:YES completion:nil];
-            }
-        }];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"School Not Available" message:@"Your school is not supported at this time. Check back later, we are constantly adding new schools." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 
@@ -202,6 +213,10 @@
             return NO;
         }
     }
+}
+
+- (IBAction)backgroundTap:(id)sender {
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Table view data source
@@ -277,7 +292,4 @@
  }
  */
 
-- (IBAction)backgroundTap:(id)sender {
-    [self.view endEditing:YES];
-}
 @end

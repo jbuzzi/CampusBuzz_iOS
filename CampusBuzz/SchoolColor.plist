@@ -6,5 +6,47 @@
 	<string>CC0000</string>
 	<key>Boston College</key>
 	<string>430000</string>
+    <key>Vanderbilt University</key>
+    <string>000000</string>
+    <key>Cornell University</key>
+    <string>b31b1b</string>
+    <key>Brown University</key>
+    <string>3A1E1A</string>
+    <key>Northwestern University</key>
+    <string>520063</string>
+    <key>Dartmouth College</key>
+    <string>00693E</string>
+    <key>Johns Hopkins University</key>
+    <string>005EB8</string>
+    <key>California Institute of Technology</key>
+    <string>FF6E1E</string>
+    <key>University of Pennsylvania</key>
+    <string>01256e</string>
+    <key>Duke University</key>
+    <string>001A57</string>
+    <key>Massachusetts Institute of Technology</key>
+    <string>A31F34</string>
+    <key>University of Chicago</key>
+    <string>800000</string>
+    <key>Stanford University</key>
+    <string>8C1515</string>
+    <key>Columbia University</key>
+    <string>003373</string>
+    <key>Yale University</key>
+    <string>0E4C92</string>
+    <key>Harvard Universit</key>
+    <string>A41034</string>
+    <key>Princeton University</key>
+    <string>F37F23</string>
+    <key>University of Notre Dame</key>
+    <string>002b5b</string>
+    <key>Rice University</key>
+    <string>002469</string>
+    <key>Carnegie Mellon University</key>
+    <string>990000</string>
+    <key>Georgetown University</key>
+    <string>164375</string>
+    <key>Emory University</key>
+    <string>002878</string>
 </dict>
 </plist>
