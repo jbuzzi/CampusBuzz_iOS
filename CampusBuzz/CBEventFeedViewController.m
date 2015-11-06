@@ -11,6 +11,8 @@
 #import "CBSignInTableViewController.h"
 #import "UIColor+AppColors.h"
 #import "SDWebImage/UIImageView+WebCache.h"
+#import "CBEventDetailTableViewController.h"
+#import "MBProgressHUD.h"
 #import <Parse/Parse.h>
 
 @interface CBEventFeedViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -26,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIView *noResultView;
 
 @property (strong, nonatomic) NSArray *events;
+@property (strong, nonatomic) PFObject *selectedEvent;
 
 @end
 
@@ -53,6 +56,13 @@
     [self createScrollMenu];
     
     self.noResultView.hidden = YES;
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading Events";
     
     [self queryEvents:nil];
 }
@@ -111,7 +121,9 @@
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
         [query whereKey:@"category" equalTo:category];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 // The find succeeded.
@@ -122,11 +134,16 @@
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
         }];
     } else {
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 // The find succeeded.
@@ -137,6 +154,9 @@
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
         }];
     }
 }
@@ -181,19 +201,30 @@
     [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
     cell.dateLabel.text = [dateFormat stringFromDate:date];
     
-    cell.attendeesLabel.text = @"0";
+    if ([event objectForKey:@"count"]) {
+        cell.attendeesLabel.text = [NSString stringWithFormat:@"%@", [event objectForKey:@"count"]];
+    } else {
+        cell.attendeesLabel.text = @"0";
+    }
     
     return cell;
 }
 
-/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedEvent = [self.events objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+}
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ShowDetails"]) {
+        CBEventDetailTableViewController *eventDetailVC = [segue destinationViewController];
+        eventDetailVC.event = self.selectedEvent;
+    }
 }
-*/
+
 
 @end
