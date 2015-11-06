@@ -12,6 +12,7 @@
 #import "UIColor+AppColors.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBEventDetailTableViewController.h"
+#import "MBProgressHUD.h"
 #import <Parse/Parse.h>
 
 @interface CBEventFeedViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -55,6 +56,13 @@
     [self createScrollMenu];
     
     self.noResultView.hidden = YES;
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading Events";
     
     [self queryEvents:nil];
 }
@@ -113,8 +121,9 @@
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
         [query whereKey:@"category" equalTo:category];
-//        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 // The find succeeded.
@@ -125,12 +134,16 @@
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
         }];
     } else {
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
-//        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 // The find succeeded.
@@ -141,6 +154,9 @@
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
         }];
     }
 }
@@ -185,7 +201,11 @@
     [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
     cell.dateLabel.text = [dateFormat stringFromDate:date];
     
-    cell.attendeesLabel.text = @"0";
+    if ([event objectForKey:@"count"]) {
+        cell.attendeesLabel.text = [NSString stringWithFormat:@"%@", [event objectForKey:@"count"]];
+    } else {
+        cell.attendeesLabel.text = @"0";
+    }
     
     return cell;
 }
