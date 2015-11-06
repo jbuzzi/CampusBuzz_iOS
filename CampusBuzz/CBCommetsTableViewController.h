@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @interface CBCommetsTableViewController : UITableViewController
+
+@property (strong, nonatomic) PFObject *event;
+@property (strong, nonatomic) NSArray *comments;
 
 @end

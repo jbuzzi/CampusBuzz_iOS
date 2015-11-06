@@ -32,6 +32,8 @@
 		749FBBE11BDBF17B001E5587 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FBBCF1BDBF17B001E5587 /* UIImageView+HighlightedWebCache.m */; };
 		749FBBE21BDBF17B001E5587 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FBBD11BDBF17B001E5587 /* UIImageView+WebCache.m */; };
 		749FBBE31BDBF17B001E5587 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FBBD31BDBF17B001E5587 /* UIView+WebCacheOperation.m */; };
+		74AF6F6D1BED38A400455889 /* CBCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6F6C1BED38A400455889 /* CBCommentTableViewCell.m */; };
+		74AF6F701BED4F3700455889 /* CBAttendeeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */; };
 		74BE4DC31BCD9C9200F5AFD4 /* SchoolColor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */; };
 		74BE4DC41BCD9C9200F5AFD4 /* SchoolList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */; };
 		74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */; };
@@ -39,6 +41,7 @@
 		74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308E11BBAFC37008736B4 /* CBRegistartionTableViewController.m */; };
 		74E04B071BEC1DB800CE3814 /* CBCommetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74E04B061BEC1DB800CE3814 /* CBCommetsTableViewController.m */; };
 		74E04B0B1BEC1DD500CE3814 /* RDRGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74E04B0A1BEC1DD500CE3814 /* RDRGrowingTextView.m */; };
+		74E04B0E1BEC35CF00CE3814 /* CBAttendeesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74E04B0D1BEC35CF00CE3814 /* CBAttendeesTableViewController.m */; };
 		74FAC8E11BBA29D300524E19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FAC8E01BBA29D300524E19 /* main.m */; };
 		74FAC8E41BBA29D300524E19 /* CBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FAC8E31BBA29D300524E19 /* CBAppDelegate.m */; };
 		74FAC8EA1BBA29D300524E19 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74FAC8E81BBA29D300524E19 /* Login.storyboard */; };
@@ -121,6 +124,10 @@
 		749FBBD11BDBF17B001E5587 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		749FBBD21BDBF17B001E5587 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		749FBBD31BDBF17B001E5587 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		74AF6F6B1BED38A400455889 /* CBCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBCommentTableViewCell.h; sourceTree = "<group>"; };
+		74AF6F6C1BED38A400455889 /* CBCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBCommentTableViewCell.m; sourceTree = "<group>"; };
+		74AF6F6E1BED4F3700455889 /* CBAttendeeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAttendeeTableViewCell.h; sourceTree = "<group>"; };
+		74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAttendeeTableViewCell.m; sourceTree = "<group>"; };
 		74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolColor.plist; sourceTree = "<group>"; };
 		74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolList.plist; sourceTree = "<group>"; };
 		74D308DA1BBAE9E9008736B4 /* CBRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBRootViewController.h; sourceTree = "<group>"; };
@@ -133,6 +140,8 @@
 		74E04B061BEC1DB800CE3814 /* CBCommetsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBCommetsTableViewController.m; sourceTree = "<group>"; };
 		74E04B091BEC1DD500CE3814 /* RDRGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDRGrowingTextView.h; sourceTree = "<group>"; };
 		74E04B0A1BEC1DD500CE3814 /* RDRGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDRGrowingTextView.m; sourceTree = "<group>"; };
+		74E04B0C1BEC35CF00CE3814 /* CBAttendeesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAttendeesTableViewController.h; sourceTree = "<group>"; };
+		74E04B0D1BEC35CF00CE3814 /* CBAttendeesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAttendeesTableViewController.m; sourceTree = "<group>"; };
 		74FAC8DB1BBA29D300524E19 /* CampusBuzz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampusBuzz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74FAC8DF1BBA29D300524E19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74FAC8E01BBA29D300524E19 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -226,6 +235,10 @@
 			children = (
 				749FBBAE1BDBD863001E5587 /* CBEventTableViewCell.h */,
 				749FBBAF1BDBD863001E5587 /* CBEventTableViewCell.m */,
+				74AF6F6B1BED38A400455889 /* CBCommentTableViewCell.h */,
+				74AF6F6C1BED38A400455889 /* CBCommentTableViewCell.m */,
+				74AF6F6E1BED4F3700455889 /* CBAttendeeTableViewCell.h */,
+				74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -289,6 +302,8 @@
 				749BFBBD1BDEEE8E007FE3C1 /* CBEventDetailTableViewController.m */,
 				74E04B051BEC1DB800CE3814 /* CBCommetsTableViewController.h */,
 				74E04B061BEC1DB800CE3814 /* CBCommetsTableViewController.m */,
+				74E04B0C1BEC35CF00CE3814 /* CBAttendeesTableViewController.h */,
+				74E04B0D1BEC35CF00CE3814 /* CBAttendeesTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -516,6 +531,7 @@
 				749FBBD71BDBF17B001E5587 /* SDWebImageCompat.m in Sources */,
 				747F7FC51BBF22B300FC4FB9 /* UIColor+AppColors.m in Sources */,
 				749FBBDF1BDBF17B001E5587 /* UIImage+MultiFormat.m in Sources */,
+				74AF6F6D1BED38A400455889 /* CBCommentTableViewCell.m in Sources */,
 				74E04B071BEC1DB800CE3814 /* CBCommetsTableViewController.m in Sources */,
 				749FBBE21BDBF17B001E5587 /* UIImageView+WebCache.m in Sources */,
 				74FAC8E11BBA29D300524E19 /* main.m in Sources */,
@@ -527,6 +543,8 @@
 				749BFBBE1BDEEE8E007FE3C1 /* CBEventDetailTableViewController.m in Sources */,
 				749FBBD81BDBF17B001E5587 /* SDWebImageDecoder.m in Sources */,
 				749FBBE01BDBF17B001E5587 /* UIImage+WebP.m in Sources */,
+				74AF6F701BED4F3700455889 /* CBAttendeeTableViewCell.m in Sources */,
+				74E04B0E1BEC35CF00CE3814 /* CBAttendeesTableViewController.m in Sources */,
 				749FBBDB1BDBF17B001E5587 /* SDWebImageManager.m in Sources */,
 				74E04B0B1BEC1DD500CE3814 /* RDRGrowingTextView.m in Sources */,
 				74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */,

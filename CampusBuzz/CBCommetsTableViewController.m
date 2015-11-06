@@ -7,10 +7,10 @@
 //
 
 #import "CBCommetsTableViewController.h"
+#import "CBCommentTableViewCell.h"
 #import "RDRGrowingTextView.h"
-
-static NSString * const CellIdentifier = @"cell";
-static CGFloat const MaxToolbarHeight = 200.0f;
+#import "MBProgressHUD.h"
+#import "SDWebImage/UIImageView+WebCache.h"
 
 @interface CBCommetsTableViewController () <UITextViewDelegate>
 
@@ -26,12 +26,50 @@ static CGFloat const MaxToolbarHeight = 200.0f;
     self.title = @"Comments";
     self.tableView.tableFooterView = [UIView new];
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 57.0;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)queryComments {
+    PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+    [query whereKey:@"event" equalTo:self.event];
+    [query orderByAscending:@"date"];
+    [query includeKey:@"creator"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            self.comments = objects;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self.tableView reloadData];
+            });
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+- (void)sendComment:(NSString *)content {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"";
+    
+    PFObject *comment = [PFObject objectWithClassName:@"Comment"];
+    comment[@"content"] = content;
+    comment[@"creator"] = [PFUser currentUser];
+    comment[@"event"] = self.event;
+    
+    [comment saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (!error) {
+            [self queryComments];
+        }
+    }];
 }
 
 #pragma mark - Overrides
@@ -50,13 +88,14 @@ static CGFloat const MaxToolbarHeight = 200.0f;
     _toolbar = [UIToolbar new];
     
     RDRGrowingTextView *textView = [RDRGrowingTextView new];
-    textView.font = [UIFont systemFontOfSize:17.0f];
+    textView.font = [UIFont systemFontOfSize:15.0f];
     textView.textContainerInset = UIEdgeInsetsMake(4.0f, 3.0f, 3.0f, 3.0f);
     textView.layer.cornerRadius = 4.0f;
     textView.layer.borderColor = [UIColor colorWithRed:200.0f/255.0f green:200.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
     textView.layer.borderWidth = 1.0f;
     textView.layer.masksToBounds = YES;
     textView.returnKeyType =  UIReturnKeySend;
+    textView.delegate = self;
     [_toolbar addSubview:textView];
     
     textView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -69,25 +108,45 @@ static CGFloat const MaxToolbarHeight = 200.0f;
     [textView setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     [_toolbar setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     
-    [_toolbar addConstraint:[NSLayoutConstraint constraintWithItem:_toolbar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:MaxToolbarHeight]];
+    [_toolbar addConstraint:[NSLayoutConstraint constraintWithItem:_toolbar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:200]];
     
     return _toolbar;
 }
 
 #pragma mark - Table view data source
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    cell.textLabel.text = @"Lorem Ipsum";
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CBCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
+    PFObject *comment = [self.comments objectAtIndex:indexPath.row];
+    
+    PFUser *creator = [comment objectForKey:@"creator"];
+    PFFile *userImageFile = [creator objectForKey:@"image"];
+    
+    [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
+    cell.userLabel.text = [creator username];
+    cell.contentLabel.text = [comment objectForKey:@"content"] ;
+    
     return cell;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 20;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.comments.count;
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        NSString *comment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (comment.length > 0) {
+            [self sendComment:comment];
+            textView.text = nil;
+        }
+        return NO;
+    }
+    
+    return YES;
 }
 
 /*
