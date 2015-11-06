@@ -186,7 +186,9 @@
     PFObject *event = [self.events objectAtIndex:indexPath.row];
     
     PFFile *eventImageFile = [event objectForKey:@"image"];
-    [cell.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+    if ([event objectForKey:@"image"]) {
+        [cell.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+    }
     
     cell.titleLabel.text = [event objectForKey:@"title"];
     

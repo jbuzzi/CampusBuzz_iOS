@@ -123,7 +123,9 @@
 
 - (void)setupEvent {
     PFFile *eventImageFile = [self.event objectForKey:@"image"];
-    [self.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+    if ([self.event objectForKey:@"image"]) {
+        [self.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+    }
     
     self.titleLabel.text = [self.event objectForKey:@"title"];
     
