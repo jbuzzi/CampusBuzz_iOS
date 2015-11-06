@@ -11,6 +11,7 @@
 #import "CBSignInTableViewController.h"
 #import "UIColor+AppColors.h"
 #import "SDWebImage/UIImageView+WebCache.h"
+#import "CBEventDetailTableViewController.h"
 #import <Parse/Parse.h>
 
 @interface CBEventFeedViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -26,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIView *noResultView;
 
 @property (strong, nonatomic) NSArray *events;
+@property (strong, nonatomic) PFObject *selectedEvent;
 
 @end
 
@@ -111,6 +113,7 @@
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
         [query whereKey:@"category" equalTo:category];
+//        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
@@ -126,6 +129,7 @@
     } else {
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
+//        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
@@ -186,14 +190,21 @@
     return cell;
 }
 
-/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedEvent = [self.events objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+}
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ShowDetails"]) {
+        CBEventDetailTableViewController *eventDetailVC = [segue destinationViewController];
+        eventDetailVC.event = self.selectedEvent;
+    }
 }
-*/
+
 
 @end
