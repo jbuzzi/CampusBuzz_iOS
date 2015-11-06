@@ -153,6 +153,38 @@
     [[UIApplication sharedApplication] openURL:url];
 }
 
+- (IBAction)morePressed:(id)sender {
+    PFUser *creator = [self.event objectForKey:@"creator"];
+    
+    if (creator == [PFUser currentUser]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *edit = [UIAlertAction actionWithTitle:@"Edit Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            
+        }];
+        UIAlertAction *remove = [UIAlertAction actionWithTitle:@"Remove Event" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+            
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:edit];
+        [alert addAction:remove];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:report];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
