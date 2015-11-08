@@ -105,6 +105,8 @@
         event[@"city"] = city;
         event[@"zipcode"] = zipcode;
         event[@"school"] = [[PFUser currentUser] objectForKey:@"school"];
+        event[@"creator"] = [PFUser currentUser];
+        event[@"count"] = @0;
         
         if (self.eventImageView.image) {
             NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);

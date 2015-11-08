@@ -7,11 +7,15 @@
 //
 
 #import "CBEventFeedViewController.h"
+#import "CBEventTableViewCell.h"
 #import "CBSignInTableViewController.h"
 #import "UIColor+AppColors.h"
+#import "SDWebImage/UIImageView+WebCache.h"
+#import "CBEventDetailTableViewController.h"
+#import "MBProgressHUD.h"
 #import <Parse/Parse.h>
 
-@interface CBEventFeedViewController ()
+@interface CBEventFeedViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *filtersScrollView;
 @property (strong, nonatomic) UIColor *mainColor;
@@ -19,6 +23,12 @@
 @property (strong, nonatomic) UIButton *selectedButton;
 @property (strong, nonatomic) UIView *selectedView;
 @property (strong, nonatomic) NSArray *categoriesImage;
+
+@property (weak, nonatomic) IBOutlet UITableView *eventTableView;
+@property (weak, nonatomic) IBOutlet UIView *noResultView;
+
+@property (strong, nonatomic) NSArray *events;
+@property (strong, nonatomic) PFObject *selectedEvent;
 
 @end
 
@@ -44,6 +54,17 @@
     
     self.categoriesImage = @[@"Academic", @"Alumni", @"Art", @"Careers", @"Clubs", @"Concerts", @"Conferences", @"Dance", @"Film", @"Food", @"Fundraisers", @"Lectures", @"Meetings", @"Parties", @"Religious", @"Science", @"Special Interest", @"Sports", @"Study Abroad", @"Theater", @"Volunteering"];
     [self createScrollMenu];
+    
+    self.noResultView.hidden = YES;
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading Events";
+    
+    [self queryEvents:nil];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle {
@@ -74,6 +95,9 @@
         [sender setSelected:NO];
         self.selectedButton = nil;
         self.title = @"Events";
+        
+        //Query all events
+        [self queryEvents:nil];
     } else {
         //Deselect previous
         [self.selectedButton setSelected:NO];
@@ -86,6 +110,54 @@
         [sender setSelected:YES];
         self.selectedButton = sender;
         self.title = [self.categoriesImage objectAtIndex:sender.tag];
+        
+        //Query events in category
+        [self queryEvents:[self.categoriesImage objectAtIndex:sender.tag]];
+    }
+}
+
+- (void)queryEvents:(NSString *)category {
+    if (category) {
+        PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+        [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
+        [query whereKey:@"category" equalTo:category];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
+        [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+                self.events = objects;
+                [self.eventTableView reloadData];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+        }];
+    } else {
+        PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+        [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
+        [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
+        [query orderByAscending:@"date"];
+        [query includeKey:@"creator"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+                self.events = objects;
+                [self.eventTableView reloadData];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+        }];
     }
 }
 
@@ -97,14 +169,64 @@
     [self.navigationController pushViewController:theTabBar animated:YES];
 }
 
-/*
+#pragma mark - UITableViewDataSource 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.events.count) {
+        self.noResultView.hidden = YES;
+    } else {
+        self.noResultView.hidden = NO;
+    }
+    return self.events.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CBEventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EventCell" forIndexPath:indexPath];
+    
+    PFObject *event = [self.events objectAtIndex:indexPath.row];
+    
+    PFFile *eventImageFile = [event objectForKey:@"image"];
+    if ([event objectForKey:@"image"]) {
+        [cell.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+    }
+    
+    cell.titleLabel.text = [event objectForKey:@"title"];
+    
+    PFUser *creator = [event objectForKey:@"creator"];
+    PFFile *userImageFile = [creator objectForKey:@"image"];
+    [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
+    
+    cell.locationLabel.text = [event objectForKey:@"location"];
+    
+    NSDate *date = [event objectForKey:@"date"];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
+    cell.dateLabel.text = [dateFormat stringFromDate:date];
+    
+    if ([event objectForKey:@"count"]) {
+        cell.attendeesLabel.text = [NSString stringWithFormat:@"%@", [event objectForKey:@"count"]];
+    } else {
+        cell.attendeesLabel.text = @"0";
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedEvent = [self.events objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+}
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ShowDetails"]) {
+        CBEventDetailTableViewController *eventDetailVC = [segue destinationViewController];
+        eventDetailVC.event = self.selectedEvent;
+    }
 }
-*/
+
 
 @end
