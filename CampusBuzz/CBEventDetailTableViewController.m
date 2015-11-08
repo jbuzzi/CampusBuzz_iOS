@@ -132,7 +132,7 @@
     PFUser *creator = [self.event objectForKey:@"creator"];
     PFFile *userImageFile = [creator objectForKey:@"image"];
     [self.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
-    self.creatorLabel.text = [NSString stringWithFormat:@"Hosted by %@", [creator username]];
+    self.creatorLabel.text = [NSString stringWithFormat:@"Hosted by %@ %@", [creator objectForKey: @"firstName"], [creator objectForKey: @"lastName"]];
     
     NSDate *date = [self.event objectForKey:@"date"];
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
