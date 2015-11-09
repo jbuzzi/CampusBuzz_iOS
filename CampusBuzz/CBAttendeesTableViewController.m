@@ -44,7 +44,7 @@
     PFFile *userImageFile = [creator objectForKey:@"image"];
     
     [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
-    cell.userLabel.text = [creator username];
+    cell.userLabel.text = [NSString stringWithFormat:@"%@ %@", [creator objectForKey:@"firstName"], [creator objectForKey:@"lastName"]];
 
     return cell;
 }
