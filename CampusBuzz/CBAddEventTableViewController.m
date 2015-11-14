@@ -7,9 +7,9 @@
 //
 
 #import "CBAddEventTableViewController.h"
+#import "SDWebImage/UIImageView+WebCache.h"
 #import "UIColor+AppColors.h"
 #import "MBProgressHUD.h"
-#import <Parse/Parse.h>
 
 @interface CBAddEventTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *dateTextField;
 @property (weak, nonatomic) IBOutlet UITextField *categoryTextField;
 @property (weak, nonatomic) IBOutlet UIButton *createButton;
+@property (strong, nonatomic) UIDatePicker *datePicker;
 
 @property (assign) NSString *placeholder;
 @property (strong, nonatomic) UIPickerView *categoryPicker;
@@ -59,125 +60,234 @@
     self.createButton.layer.cornerRadius = 5.0f;
     self.createButton.backgroundColor = mainColor;
     
-    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
-    datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-    [datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.datePicker = [[UIDatePicker alloc] init];
+    self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    [self.datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
     NSDate *currentDate = [NSDate date];
-    [datePicker setMinimumDate:currentDate];
-    self.dateTextField.inputView = datePicker;
+    [self.datePicker setMinimumDate:currentDate];
+    self.dateTextField.inputView = self.datePicker;
     
     self.categoties = @[@"Academic", @"Alumni", @"Art", @"Careers", @"Clubs", @"Concerts", @"Conferences", @"Dance", @"Film", @"Food", @"Fundraisers", @"Lectures", @"Meetings", @"Parties", @"Religious", @"Science", @"Special Interest", @"Sports", @"Study Abroad", @"Theater", @"Volunteering"];
-    UIPickerView *categoryPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 216)];
-    categoryPicker.dataSource = self;
-    categoryPicker.delegate = self;
-    self.categoryTextField.inputView = categoryPicker;
+    self.categoryPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 216)];
+    self.categoryPicker.dataSource = self;
+    self.categoryPicker.delegate = self;
+    self.categoryTextField.inputView = self.categoryPicker;
+    
+    if (self.editMode && self.event) {
+        self.title = @"Edit Event";
+        
+        PFFile *eventImageFile = [self.event objectForKey:@"image"];
+        if ([self.event objectForKey:@"image"]) {
+            [self.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
+        }
+        self.titleTextField.text = [self.event objectForKey:@"title"];
+        self.descriptionTextView.text = [self.event objectForKey:@"description"];
+        self.descriptionTextView.textColor = [UIColor blackColor];
+        NSDate *eventDate = [self.event objectForKey:@"date"];
+        [self.datePicker setDate:eventDate];
+        self.eventDate = eventDate;
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
+        self.dateTextField.text = [dateFormat stringFromDate:eventDate];
+        self.locationTextField.text = [self.event objectForKey:@"location"];
+        self.addressTextField.text = [self.event objectForKey:@"address"];
+        self.cityTextField.text = [self.event objectForKey:@"city"];
+        self.zipcodeTextField.text = [self.event objectForKey:@"zipcode"];
+        NSString *eventCategory = [self.event objectForKey:@"category"];
+        [self.categoryPicker selectRow:[self.categoties indexOfObject:eventCategory] inComponent:0 animated:NO];
+        self.categoryTextField.text = eventCategory;
+        
+        [self.addImageButton setImage:nil forState:UIControlStateNormal];
+        [self.createButton setTitle:@"Update Event" forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)createPressed:(id)sender {
     if ([self checkForCompletion]) {
-        [self.titleTextField resignFirstResponder];
-        [self.descriptionTextView resignFirstResponder];
-        [self.dateTextField resignFirstResponder];
-        [self.locationTextField resignFirstResponder];
-        [self.addressTextField resignFirstResponder];
-        [self.cityTextField resignFirstResponder];
-        [self.zipcodeTextField resignFirstResponder];
-        [self.categoryTextField resignFirstResponder];
-        
-        NSString *title = [self.titleTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *description = [self.descriptionTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *location = [self.locationTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *address = [self.addressTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *city = [self.cityTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *zipcode = [self.zipcodeTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *category = [self.categoryTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Creating Event";
-        
-        PFObject *event = [PFObject objectWithClassName:@"Event"];
-        event[@"title"] = title;
-        event[@"description"] = description;
-        event[@"date"] = self.eventDate;
-        event[@"category"] = category;
-        event[@"location"] = location;
-        event[@"address"] = address;
-        event[@"city"] = city;
-        event[@"zipcode"] = zipcode;
-        event[@"school"] = [[PFUser currentUser] objectForKey:@"school"];
-        event[@"creator"] = [PFUser currentUser];
-        event[@"count"] = @0;
-        
-        if (self.eventImageView.image) {
-            NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);
-            PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
-            [event setObject:imageFile forKey:@"image"];
-        } else {
-            UIImage *img = [UIImage imageNamed:@"eventBackground.png"];
-            NSData *imageData = UIImagePNGRepresentation(img);
-            PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
-            [event setObject:imageFile forKey:@"image"];
-        }
-        
-        NSString *fullAddress = [NSString stringWithFormat:@"%@, %@, %@", address, city, zipcode];
-        CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-        [geoCoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
-            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            CLLocation *location = placemark.location;
-            CLLocationCoordinate2D coordinate = location.coordinate;
-            NSLog(@"Latitude %f", coordinate.latitude);
-            NSLog(@"Longitude %f", coordinate.longitude);
+        if ([self validateZipcode]) {
+            [self.titleTextField resignFirstResponder];
+            [self.descriptionTextView resignFirstResponder];
+            [self.dateTextField resignFirstResponder];
+            [self.locationTextField resignFirstResponder];
+            [self.addressTextField resignFirstResponder];
+            [self.cityTextField resignFirstResponder];
+            [self.zipcodeTextField resignFirstResponder];
+            [self.categoryTextField resignFirstResponder];
             
-            if (placemark) {
-                event[@"state"] = placemark.administrativeArea;
+            NSString *title = [self.titleTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *description = [self.descriptionTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *location = [self.locationTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *address = [self.addressTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *city = [self.cityTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *zipcode = [self.zipcodeTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString *category = [self.categoryTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             
-                PFGeoPoint *locationPoint =  [PFGeoPoint geoPointWithLocation:location];
-                event[@"locationPoint"] = locationPoint;
+            if (self.editMode && self.event) {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = @"Updating Event";
                 
-                [[PFUser currentUser] fetch];
-                if ([[[PFUser currentUser] objectForKey:@"emailVerified"] boolValue]) {
-                    [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                self.event[@"title"] = title;
+                self.event[@"description"] = description;
+                self.event[@"date"] = self.eventDate;
+                self.event[@"category"] = category;
+                self.event[@"location"] = location;
+                self.event[@"address"] = address;
+                self.event[@"city"] = city;
+                self.event[@"zipcode"] = zipcode;
+                
+                if (self.eventImageView.image) {
+                    NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);
+                    PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
+                    [self.event setObject:imageFile forKey:@"image"];
+                } else {
+                    UIImage *img = [UIImage imageNamed:@"eventBackground.png"];
+                    NSData *imageData = UIImagePNGRepresentation(img);
+                    PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
+                    [self.event setObject:imageFile forKey:@"image"];
+                }
+                
+                NSString *fullAddress = [NSString stringWithFormat:@"%@, %@, %@", address, city, zipcode];
+                CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+                [geoCoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
+                    CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                    CLLocation *location = placemark.location;
+                    CLLocationCoordinate2D coordinate = location.coordinate;
+                    NSLog(@"Latitude %f", coordinate.latitude);
+                    NSLog(@"Longitude %f", coordinate.longitude);
+                    
+                    if (placemark) {
+                        self.event[@"state"] = placemark.administrativeArea;
+                        
+                        PFGeoPoint *locationPoint =  [PFGeoPoint geoPointWithLocation:location];
+                        self.event[@"locationPoint"] = locationPoint;
+                        
+                        
+                        [self.event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                            });
+                            if (succeeded) {
+                                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Event Updated!" message:@"All done, your event has been updated with the new information." preferredStyle:UIAlertControllerStyleAlert];
+                                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                }];
+                                [alert addAction:ok];
+                                [self presentViewController:alert animated:YES completion:nil];
+                            } else {
+                                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"There was an error updating your event." preferredStyle:UIAlertControllerStyleAlert];
+                                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                }];
+                                [alert addAction:ok];
+                                [self presentViewController:alert animated:YES completion:nil];
+                            }
+                        }];
+                    } else {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [MBProgressHUD hideHUDForView:self.view animated:YES];
                         });
-                        if (succeeded) {
-                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Event Created!" message:@"Congrats, your event has been created and added to your school events." preferredStyle:UIAlertControllerStyleAlert];
-                            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                                [self.navigationController popViewControllerAnimated:YES];
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Address not found, make sure the address is correct." preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                        }];
+                        [alert addAction:ok];
+                        [self presentViewController:alert animated:YES completion:nil];
+                    }
+                }];
+            } else {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = @"Creating Event";
+                
+                PFObject *event = [PFObject objectWithClassName:@"Event"];
+                event[@"title"] = title;
+                event[@"description"] = description;
+                event[@"date"] = self.eventDate;
+                event[@"category"] = category;
+                event[@"location"] = location;
+                event[@"address"] = address;
+                event[@"city"] = city;
+                event[@"zipcode"] = zipcode;
+                event[@"school"] = [[PFUser currentUser] objectForKey:@"school"];
+                event[@"creator"] = [PFUser currentUser];
+                event[@"count"] = @0;
+                
+                if (self.eventImageView.image) {
+                    NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);
+                    PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
+                    [event setObject:imageFile forKey:@"image"];
+                } else {
+                    UIImage *img = [UIImage imageNamed:@"eventBackground.png"];
+                    NSData *imageData = UIImagePNGRepresentation(img);
+                    PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
+                    [event setObject:imageFile forKey:@"image"];
+                }
+                
+                NSString *fullAddress = [NSString stringWithFormat:@"%@, %@, %@", address, city, zipcode];
+                CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+                [geoCoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
+                    CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                    CLLocation *location = placemark.location;
+                    CLLocationCoordinate2D coordinate = location.coordinate;
+                    NSLog(@"Latitude %f", coordinate.latitude);
+                    NSLog(@"Longitude %f", coordinate.longitude);
+                    
+                    if (placemark) {
+                        event[@"state"] = placemark.administrativeArea;
+                        
+                        PFGeoPoint *locationPoint =  [PFGeoPoint geoPointWithLocation:location];
+                        event[@"locationPoint"] = locationPoint;
+                        
+                        [[PFUser currentUser] fetch];
+                        if ([[[PFUser currentUser] objectForKey:@"emailVerified"] boolValue]) {
+                            [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                });
+                                if (succeeded) {
+                                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Event Created!" message:@"Congrats, your event has been created and added to your school events." preferredStyle:UIAlertControllerStyleAlert];
+                                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                        [self.navigationController popViewControllerAnimated:YES];
+                                    }];
+                                    [alert addAction:ok];
+                                    [self presentViewController:alert animated:YES completion:nil];
+                                } else {
+                                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"There was an error adding your event." preferredStyle:UIAlertControllerStyleAlert];
+                                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                        [self.navigationController popViewControllerAnimated:YES];
+                                    }];
+                                    [alert addAction:ok];
+                                    [self presentViewController:alert animated:YES completion:nil];
+                                }
                             }];
-                            [alert addAction:ok];
-                            [self presentViewController:alert animated:YES completion:nil];
                         } else {
-                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"There was an error adding your event." preferredStyle:UIAlertControllerStyleAlert];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                            });
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Email must be verify before you can post events in your school. Please check your inbox or spam folder and verify your account." preferredStyle:UIAlertControllerStyleAlert];
                             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                                [self.navigationController popViewControllerAnimated:YES];
                             }];
                             [alert addAction:ok];
                             [self presentViewController:alert animated:YES completion:nil];
                         }
-                    }];
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    });
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Email must be verify before you can post events in your school. Please check your inbox or spam folder and verify your account." preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                    }];
-                    [alert addAction:ok];
-                    [self presentViewController:alert animated:YES completion:nil];
-                }
-                
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                });
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Address not found, make sure the address is correct." preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                        
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        });
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Address not found, make sure the address is correct." preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                        }];
+                        [alert addAction:ok];
+                        [self presentViewController:alert animated:YES completion:nil];
+                    }
                 }];
-                [alert addAction:ok];
-                [self presentViewController:alert animated:YES completion:nil];
             }
-        }];
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Invalid zip code, make sure your zip code is five digits." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"All fields must be completed" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
@@ -198,6 +308,16 @@
     NSString *category = [self.categoryTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if (title.length > 0 && description.length > 0 && location.length > 0 && address.length > 0 && city.length > 0 && zipcode.length > 0 && date.length > 0 && category.length > 0) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)validateZipcode {
+    NSString *zipcode = [self.zipcodeTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (zipcode.length == 5) {
         return YES;
     } else {
         return NO;
@@ -304,7 +424,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:self.placeholder]) {
         [self performSelector:@selector(setCursorToBeginning:) withObject:textView afterDelay:0.01];
-    } 
+    }
 }
 
 - (void)setCursorToBeginning:(UITextView *)textView {
@@ -361,13 +481,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

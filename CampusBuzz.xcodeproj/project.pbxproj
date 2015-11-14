@@ -36,6 +36,7 @@
 		74AF6F701BED4F3700455889 /* CBAttendeeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */; };
 		74BE4DC31BCD9C9200F5AFD4 /* SchoolColor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */; };
 		74BE4DC41BCD9C9200F5AFD4 /* SchoolList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */; };
+		74BEF4AA1BF7922400AF2554 /* NSDate+DisplayDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */; };
 		74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */; };
 		74D308DF1BBAE9E9008736B4 /* CBSignInTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DD1BBAE9E9008736B4 /* CBSignInTableViewController.m */; };
 		74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308E11BBAFC37008736B4 /* CBRegistartionTableViewController.m */; };
@@ -130,6 +131,8 @@
 		74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAttendeeTableViewCell.m; sourceTree = "<group>"; };
 		74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolColor.plist; sourceTree = "<group>"; };
 		74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolList.plist; sourceTree = "<group>"; };
+		74BEF4A81BF7922400AF2554 /* NSDate+DisplayDates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DisplayDates.h"; sourceTree = "<group>"; };
+		74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DisplayDates.m"; sourceTree = "<group>"; };
 		74D308DA1BBAE9E9008736B4 /* CBRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBRootViewController.h; sourceTree = "<group>"; };
 		74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBRootViewController.m; sourceTree = "<group>"; };
 		74D308DC1BBAE9E9008736B4 /* CBSignInTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSignInTableViewController.h; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 			children = (
 				747F7FC31BBF22B300FC4FB9 /* UIColor+AppColors.h */,
 				747F7FC41BBF22B300FC4FB9 /* UIColor+AppColors.m */,
+				74BEF4A81BF7922400AF2554 /* NSDate+DisplayDates.h */,
+				74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -528,6 +533,7 @@
 				749FBBDD1BDBF17B001E5587 /* UIButton+WebCache.m in Sources */,
 				749FBBDA1BDBF17B001E5587 /* SDWebImageDownloaderOperation.m in Sources */,
 				749FBBD41BDBF17B001E5587 /* MKAnnotationView+WebCache.m in Sources */,
+				74BEF4AA1BF7922400AF2554 /* NSDate+DisplayDates.m in Sources */,
 				749FBBD71BDBF17B001E5587 /* SDWebImageCompat.m in Sources */,
 				747F7FC51BBF22B300FC4FB9 /* UIColor+AppColors.m in Sources */,
 				749FBBDF1BDBF17B001E5587 /* UIImage+MultiFormat.m in Sources */,
