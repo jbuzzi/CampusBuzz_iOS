@@ -385,7 +385,21 @@
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Report Event" message:@"Is this event offensive and/or inappropriate and should be removed?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                [self.event incrementKey:@"report"];
+                [self.event saveInBackground];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"Thank you for your report we'll look into it." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                }];
+                [alert addAction:yes];
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
+            UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:yes];
+            [alert addAction:no];
+            [self presentViewController:alert animated:YES completion:nil];
         }];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
