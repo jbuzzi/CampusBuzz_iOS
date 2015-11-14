@@ -11,6 +11,7 @@
 #import "RDRGrowingTextView.h"
 #import "MBProgressHUD.h"
 #import "SDWebImage/UIImageView+WebCache.h"
+#import "NSDate+DisplayDates.h"
 
 @interface CBCommetsTableViewController () <UITextViewDelegate>
 
@@ -124,6 +125,7 @@
     
     [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
     cell.userLabel.text = [creator username];
+    cell.timeLabel.text = [comment.createdAt timeAgo];
     cell.contentLabel.text = [comment objectForKey:@"content"] ;
     
     return cell;
