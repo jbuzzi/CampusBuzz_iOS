@@ -121,6 +121,10 @@
     [self queryAttendees];
 }
 
+- (void)viewDidLayoutSubviews {
+    [self.descriptionTextView setContentOffset:CGPointZero animated:NO];
+}
+
 - (void)setupEvent {
     PFFile *eventImageFile = [self.event objectForKey:@"image"];
     if ([self.event objectForKey:@"image"]) {
