@@ -998,6 +998,7 @@
                         <outlet property="mapView" destination="Pc2-hf-INY" id="2IY-Fl-OsI"/>
                         <outlet property="titleLabel" destination="f5B-cs-QZ8" id="kKB-U6-NZS"/>
                         <outlet property="userImageView" destination="PsN-zJ-41B" id="SM6-22-vKL"/>
+                        <segue destination="AFQ-j4-Goq" kind="show" identifier="EditEvent" id="W2X-sh-Llm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gEN-W8-LO0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1200,4 +1201,7 @@
         <image name="plus" width="32" height="32"/>
         <image name="user" width="32" height="32"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="W2X-sh-Llm"/>
+    </inferredMetricsTieBreakers>
 </document>

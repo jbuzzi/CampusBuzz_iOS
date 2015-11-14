@@ -7,6 +7,7 @@
 //
 
 #import "CBEventDetailTableViewController.h"
+#import "CBAddEventTableViewController.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBCommetsTableViewController.h"
 #import "CBAttendeesTableViewController.h"
@@ -39,6 +40,7 @@
 @property (strong, nonatomic) NSArray *attendees;
 @property (assign, nonatomic) BOOL loadingComments;
 @property (assign, nonatomic) BOOL loadingAttendees;
+@property (assign, nonatomic) BOOL edited;
 
 @property (strong, nonatomic) PFObject *currentRSVP;
 
@@ -55,8 +57,6 @@
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
     UIColor * mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
-    
-    self.title = [self.event objectForKey:@"title"];
     
     self.userImageView.layer.masksToBounds = YES;
     self.userImageView.layer.cornerRadius = self.userImageView.frame.size.height/2;
@@ -119,6 +119,11 @@
     
     self.loadingAttendees = YES;
     [self queryAttendees];
+    
+    if (self.edited) {
+        [self refreshEvent];
+        self.edited = NO;
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -130,6 +135,8 @@
     if ([self.event objectForKey:@"image"]) {
         [self.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
     }
+    
+    self.title = [self.event objectForKey:@"category"];
     
     self.titleLabel.text = [self.event objectForKey:@"title"];
     
@@ -161,6 +168,26 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)refreshEvent {
+    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+    [query whereKey:@"objectId" equalTo:self.event.objectId];
+    [query includeKey:@"creator"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            self.event = [objects firstObject];
+            [self setupEvent];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
 - (void)queryComments {
     PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
     [query whereKey:@"event" equalTo:self.event];
@@ -169,7 +196,7 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
-            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            NSLog(@"Successfully retrieved %lu comments.", (unsigned long)objects.count);
             self.comments = objects;
             [self.commentsButton setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)self.comments.count] forState:UIControlStateNormal];
             self.loadingComments = NO;
@@ -191,8 +218,16 @@
     [query includeKey:@"attendee"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
+            //Reset preview
+            [self.attendee1ImageView setImage:nil];
+            [self.attendee2ImageView setImage:nil];
+            [self.attendee3ImageView setImage:nil];
+            [self.attendee4ImageView setImage:nil];
+            [self.attendee5ImageView setImage:nil];
+            [self.attendee6ImageView setImage:nil];
+            
             // The find succeeded.
-            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            NSLog(@"Successfully retrieved %lu attendees.", (unsigned long)objects.count);
             self.attendees = objects;
             [self.attendeesButton setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)self.attendees.count] forState:UIControlStateNormal];
             
@@ -370,7 +405,8 @@
     if (creator == [PFUser currentUser]) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *edit = [UIAlertAction actionWithTitle:@"Edit Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            
+            self.edited = YES;
+            [self performSegueWithIdentifier:@"EditEvent" sender:self];
         }];
         UIAlertAction *remove = [UIAlertAction actionWithTitle:@"Remove Event" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
             
@@ -444,6 +480,10 @@
     } else if ([[segue identifier] isEqualToString:@"ShowAttendees"]) {
         CBAttendeesTableViewController *eventAttendeesVC = [segue destinationViewController];
         eventAttendeesVC.attendees = self.attendees;
+    } else if ([[segue identifier] isEqualToString:@"EditEvent"]) {
+        CBAddEventTableViewController *addEventVC = [segue destinationViewController];
+        addEventVC.event = self.event;
+        addEventVC.editMode = YES;
     }
 }
 
