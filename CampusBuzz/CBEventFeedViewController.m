@@ -213,8 +213,17 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.selectedEvent = [self.events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+    [[PFUser currentUser] fetch];
+    if ([[[PFUser currentUser] objectForKey:@"emailVerified"] boolValue]) {
+        self.selectedEvent = [self.events objectAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Email must be verify before you can view events in your school. Please check your inbox or spam folder and verify your account." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        }];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 
