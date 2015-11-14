@@ -289,7 +289,7 @@
 - (IBAction)goingPressed:(id)sender {
     if (self.currentRSVP) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Changed Your Mind" message:@"Are you sure you want to be removed from this event?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.labelText = @"";
 
@@ -322,7 +322,7 @@
         [self presentViewController:alert animated:YES completion:nil];
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Yay!" message:@"Would you like to add this event to your phone calendar?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             EKEventStore *store = [EKEventStore new];
             [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
                 if (!granted) {
@@ -361,7 +361,7 @@
                 }];
             }];
         }];
-        UIAlertAction *no = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.labelText = @"";
             
