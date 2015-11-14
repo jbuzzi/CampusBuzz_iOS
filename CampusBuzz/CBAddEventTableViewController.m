@@ -112,6 +112,11 @@
             NSData *imageData = UIImageJPEGRepresentation(self.eventImageView.image, 0.5f);
             PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
             [event setObject:imageFile forKey:@"image"];
+        } else {
+            UIImage *img = [UIImage imageNamed:@"eventBackground.png"];
+            NSData *imageData = UIImagePNGRepresentation(img);
+            PFFile *imageFile = [PFFile fileWithName:@"event_image.jpg" data:imageData];
+            [event setObject:imageFile forKey:@"image"];
         }
         
         NSString *fullAddress = [NSString stringWithFormat:@"%@, %@, %@", address, city, zipcode];
