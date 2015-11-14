@@ -409,7 +409,30 @@
             [self performSegueWithIdentifier:@"EditEvent" sender:self];
         }];
         UIAlertAction *remove = [UIAlertAction actionWithTitle:@"Remove Event" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove Event" message:@"Are you sure you want to delete this event. Deleting an event cannot be undone." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+               [self.event deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                   if (!error) {
+                       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This event has been removed." message:@"" preferredStyle:UIAlertControllerStyleAlert];
+                       UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                           [self.navigationController popToRootViewControllerAnimated:YES];
+                       }];
+                       [alert addAction:yes];
+                       [self presentViewController:alert animated:YES completion:nil];
+                   } else {
+                       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps" message:@"There was an error removing this event." preferredStyle:UIAlertControllerStyleAlert];
+                       UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                       }];
+                       [alert addAction:yes];
+                       [self presentViewController:alert animated:YES completion:nil];
+                   }
+               }];
+            }];
+            UIAlertAction *no = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:yes];
+            [alert addAction:no];
+            [self presentViewController:alert animated:YES completion:nil];
         }];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -425,7 +448,7 @@
             UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
                 [self.event incrementKey:@"report"];
                 [self.event saveInBackground];
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"Thank you for your report we'll look into it." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you for your report we'll look into it." message:@"" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
                 }];
                 [alert addAction:yes];
