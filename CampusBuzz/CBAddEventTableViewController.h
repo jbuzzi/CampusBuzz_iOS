@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @interface CBAddEventTableViewController : UITableViewController
+
+@property (strong, nonatomic) PFObject *event;
+@property (assign, nonatomic) BOOL editMode;
 
 @end
