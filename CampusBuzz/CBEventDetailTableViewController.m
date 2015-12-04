@@ -7,9 +7,11 @@
 //
 
 #import "CBEventDetailTableViewController.h"
+#import "CBAddEventTableViewController.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBCommetsTableViewController.h"
 #import "CBAttendeesTableViewController.h"
+#import "CBProfileViewController.h"
 #import "UIColor+AppColors.h"
 #import "MBProgressHUD.h"
 #import <MapKit/MapKit.h>
@@ -34,13 +36,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *attendeesButton;
 @property (weak, nonatomic) IBOutlet UIButton *commentsButton;
 @property (weak, nonatomic) IBOutlet UIButton *goingButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *moreBarButtonItem;
 
 @property (strong, nonatomic) NSArray *comments;
 @property (strong, nonatomic) NSArray *attendees;
 @property (assign, nonatomic) BOOL loadingComments;
 @property (assign, nonatomic) BOOL loadingAttendees;
+@property (assign, nonatomic) BOOL edited;
 
 @property (strong, nonatomic) PFObject *currentRSVP;
+@property (strong, nonatomic) PFUser *creator;
 
 @end
 
@@ -55,8 +60,6 @@
     NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SchoolColor" ofType:@"plist"];
     NSDictionary *colorDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
     UIColor * mainColor = [UIColor colorFromHexString:[colorDictionary objectForKey:[[PFUser currentUser] objectForKey:@"school"]]];
-    
-    self.title = [self.event objectForKey:@"title"];
     
     self.userImageView.layer.masksToBounds = YES;
     self.userImageView.layer.cornerRadius = self.userImageView.frame.size.height/2;
@@ -119,6 +122,15 @@
     
     self.loadingAttendees = YES;
     [self queryAttendees];
+    
+    if (self.edited) {
+        [self refreshEvent];
+        self.edited = NO;
+    }
+}
+
+- (void)viewDidLayoutSubviews {
+    [self.descriptionTextView setContentOffset:CGPointZero animated:NO];
 }
 
 - (void)setupEvent {
@@ -127,9 +139,13 @@
         [self.eventImageView sd_setImageWithURL:[NSURL URLWithString:eventImageFile.url]];
     }
     
+    self.title = [self.event objectForKey:@"category"];
+    
     self.titleLabel.text = [self.event objectForKey:@"title"];
     
     PFUser *creator = [self.event objectForKey:@"creator"];
+    self.creator = creator;
+    
     PFFile *userImageFile = [creator objectForKey:@"image"];
     [self.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
     self.creatorLabel.text = [NSString stringWithFormat:@"Hosted by %@ %@", [creator objectForKey: @"firstName"], [creator objectForKey: @"lastName"]];
@@ -139,6 +155,17 @@
     [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
     self.dateLabel.text = [dateFormat stringFromDate:date];
     
+    NSDate *today = [NSDate date];
+    NSComparisonResult result;
+    
+    result = [today compare:date];
+    if(result == NSOrderedDescending) {
+        self.goingButton.enabled = NO;
+        self.goingButton.alpha = 0.2f;
+        self.moreBarButtonItem.enabled = NO;
+        self.moreBarButtonItem.tintColor = [UIColor clearColor];
+    }
+
     self.locationLabel.text = [NSString stringWithFormat:@"%@, %@, %@ %@", [self.event objectForKey:@"address"], [self.event objectForKey:@"city"], [self.event objectForKey:@"state"], [self.event objectForKey:@"zipcode"]];
     
     PFGeoPoint *location = [self.event objectForKey:@"locationPoint"];
@@ -157,6 +184,26 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)refreshEvent {
+    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+    [query whereKey:@"objectId" equalTo:self.event.objectId];
+    [query includeKey:@"creator"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            self.event = [objects firstObject];
+            [self setupEvent];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
 - (void)queryComments {
     PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
     [query whereKey:@"event" equalTo:self.event];
@@ -165,7 +212,7 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
-            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            NSLog(@"Successfully retrieved %lu comments.", (unsigned long)objects.count);
             self.comments = objects;
             [self.commentsButton setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)self.comments.count] forState:UIControlStateNormal];
             self.loadingComments = NO;
@@ -187,8 +234,16 @@
     [query includeKey:@"attendee"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
+            //Reset preview
+            [self.attendee1ImageView setImage:nil];
+            [self.attendee2ImageView setImage:nil];
+            [self.attendee3ImageView setImage:nil];
+            [self.attendee4ImageView setImage:nil];
+            [self.attendee5ImageView setImage:nil];
+            [self.attendee6ImageView setImage:nil];
+            
             // The find succeeded.
-            NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
+            NSLog(@"Successfully retrieved %lu attendees.", (unsigned long)objects.count);
             self.attendees = objects;
             [self.attendeesButton setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)self.attendees.count] forState:UIControlStateNormal];
             
@@ -247,10 +302,14 @@
     }];
 }
 
+- (IBAction)hostPressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
+}
+
 - (IBAction)goingPressed:(id)sender {
     if (self.currentRSVP) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Changed Your Mind" message:@"Are you sure you want to be removed from this event?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.labelText = @"";
 
@@ -283,7 +342,7 @@
         [self presentViewController:alert animated:YES completion:nil];
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Yay!" message:@"Would you like to add this event to your phone calendar?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             EKEventStore *store = [EKEventStore new];
             [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
                 if (!granted) {
@@ -322,7 +381,7 @@
                 }];
             }];
         }];
-        UIAlertAction *no = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.labelText = @"";
             
@@ -366,10 +425,34 @@
     if (creator == [PFUser currentUser]) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *edit = [UIAlertAction actionWithTitle:@"Edit Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            
+            self.edited = YES;
+            [self performSegueWithIdentifier:@"EditEvent" sender:self];
         }];
         UIAlertAction *remove = [UIAlertAction actionWithTitle:@"Remove Event" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove Event" message:@"Are you sure you want to delete this event. Deleting an event cannot be undone." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+               [self.event deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                   if (!error) {
+                       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This event has been removed." message:@"" preferredStyle:UIAlertControllerStyleAlert];
+                       UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                           [self.navigationController popToRootViewControllerAnimated:YES];
+                       }];
+                       [alert addAction:yes];
+                       [self presentViewController:alert animated:YES completion:nil];
+                   } else {
+                       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps" message:@"There was an error removing this event." preferredStyle:UIAlertControllerStyleAlert];
+                       UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                       }];
+                       [alert addAction:yes];
+                       [self presentViewController:alert animated:YES completion:nil];
+                   }
+               }];
+            }];
+            UIAlertAction *no = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:yes];
+            [alert addAction:no];
+            [self presentViewController:alert animated:YES completion:nil];
         }];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -381,7 +464,21 @@
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report Event" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Report Event" message:@"Is this event offensive and/or inappropriate and should be removed?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                [self.event incrementKey:@"report"];
+                [self.event saveInBackground];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you for your report we'll look into it." message:@"" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                }];
+                [alert addAction:yes];
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
+            UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:yes];
+            [alert addAction:no];
+            [self presentViewController:alert animated:YES completion:nil];
         }];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -426,6 +523,13 @@
     } else if ([[segue identifier] isEqualToString:@"ShowAttendees"]) {
         CBAttendeesTableViewController *eventAttendeesVC = [segue destinationViewController];
         eventAttendeesVC.attendees = self.attendees;
+    } else if ([[segue identifier] isEqualToString:@"EditEvent"]) {
+        CBAddEventTableViewController *addEventVC = [segue destinationViewController];
+        addEventVC.event = self.event;
+        addEventVC.editMode = YES;
+    } else if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+        CBProfileViewController *profileVC = [segue destinationViewController];
+        profileVC.user = self.creator;
     }
 }
 

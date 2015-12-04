@@ -8,11 +8,15 @@
 
 #import "CBCommetsTableViewController.h"
 #import "CBCommentTableViewCell.h"
+#import "CBProfileViewController.h"
 #import "RDRGrowingTextView.h"
 #import "MBProgressHUD.h"
 #import "SDWebImage/UIImageView+WebCache.h"
+#import "NSDate+DisplayDates.h"
 
-@interface CBCommetsTableViewController () <UITextViewDelegate>
+@interface CBCommetsTableViewController () <UITextViewDelegate, UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) PFUser *selectedUser;
 
 @end
 
@@ -23,11 +27,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     self.title = @"Comments";
     self.tableView.tableFooterView = [UIView new];
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 57.0;
+    
+    UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    lpgr.minimumPressDuration = 1.0;
+    lpgr.delegate = self;
+    [self.tableView addGestureRecognizer:lpgr];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,13 +85,11 @@
 
 #pragma mark - Overrides
 
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
-- (UIView *)inputAccessoryView
-{
+- (UIView *)inputAccessoryView {
     if (_toolbar) {
         return _toolbar;
     }
@@ -113,6 +122,34 @@
     return _toolbar;
 }
 
+-(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
+    CGPoint point = [gestureRecognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    if (indexPath == nil) {
+        NSLog(@"Long press on table view but not on a row");
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        PFObject *comment = [self.comments objectAtIndex:indexPath.row];
+        PFUser *creator = [comment objectForKey:@"creator"];
+        if (creator == [PFUser currentUser]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction *remove = [UIAlertAction actionWithTitle:@"Delete Comment" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+                [comment deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (!error) {
+                        [self queryComments];
+                    }
+                }];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+            }];
+            [alert addAction:remove];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+}
+
 #pragma mark - Table view data source
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -124,6 +161,7 @@
     
     [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
     cell.userLabel.text = [creator username];
+    cell.timeLabel.text = [comment.createdAt timeAgo];
     cell.contentLabel.text = [comment objectForKey:@"content"] ;
     
     return cell;
@@ -131,6 +169,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.comments.count;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PFObject *comment = [self.comments objectAtIndex:indexPath.row];
+    PFUser *creator = [comment objectForKey:@"creator"];
+    self.selectedUser = creator;
+    
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
 }
 
 #pragma mark - UITextViewDelegate
@@ -145,18 +191,19 @@
         }
         return NO;
     }
-    
     return YES;
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+         CBProfileViewController *profileVC = [segue destinationViewController];
+         profileVC.user = self.selectedUser;
+     }
+ }
+
 
 @end

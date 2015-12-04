@@ -9,6 +9,7 @@
 #import "CBEventFeedViewController.h"
 #import "CBEventTableViewCell.h"
 #import "CBSignInTableViewController.h"
+#import "CBProfileViewController.h"
 #import "UIColor+AppColors.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBEventDetailTableViewController.h"
@@ -29,6 +30,9 @@
 
 @property (strong, nonatomic) NSArray *events;
 @property (strong, nonatomic) PFObject *selectedEvent;
+@property (strong, nonatomic) NSString *selectedCategory;
+
+@property (assign, nonatomic) BOOL isLoading;
 
 @end
 
@@ -64,7 +68,8 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading Events";
     
-    [self queryEvents:nil];
+    self.isLoading = YES;
+    [self queryEvents:self.selectedCategory];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle {
@@ -118,6 +123,7 @@
 
 - (void)queryEvents:(NSString *)category {
     if (category) {
+        self.selectedCategory = category;
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
         [query whereKey:@"category" equalTo:category];
@@ -125,6 +131,7 @@
         [query orderByAscending:@"date"];
         [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            self.isLoading = YES;
             if (!error) {
                 // The find succeeded.
                 NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
@@ -139,12 +146,14 @@
             });
         }];
     } else {
+        self.selectedCategory = nil;
         PFQuery *query = [PFQuery queryWithClassName:@"Event"];
         [query whereKey:@"school" equalTo:[[PFUser currentUser] objectForKey:@"school"]];
         [query whereKey:@"date" greaterThanOrEqualTo:[NSDate date]];
         [query orderByAscending:@"date"];
         [query includeKey:@"creator"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            self.isLoading = YES;
             if (!error) {
                 // The find succeeded.
                 NSLog(@"Successfully retrieved %lu events.", (unsigned long)objects.count);
@@ -161,12 +170,8 @@
     }
 }
 
-- (IBAction)logOut:(id)sender {
-    [PFUser logOut];
-    
-    UIStoryboard *secondStoryBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *theTabBar = (UIViewController *)[secondStoryBoard instantiateViewControllerWithIdentifier:@"login"];
-    [self.navigationController pushViewController:theTabBar animated:YES];
+- (IBAction)userProfilePressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
 }
 
 #pragma mark - UITableViewDataSource 
@@ -175,7 +180,11 @@
     if (self.events.count) {
         self.noResultView.hidden = YES;
     } else {
-        self.noResultView.hidden = NO;
+        if (self.isLoading) {
+            self.noResultView.hidden = YES;
+        } else {
+            self.noResultView.hidden = NO;
+        }
     }
     return self.events.count;
 }
@@ -213,8 +222,17 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.selectedEvent = [self.events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+    [[PFUser currentUser] fetch];
+    if ([[[PFUser currentUser] objectForKey:@"emailVerified"] boolValue]) {
+        self.selectedEvent = [self.events objectAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:@"ShowDetails" sender:self];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Opps!" message:@"Email must be verify before you can view events in your school. Please check your inbox or spam folder and verify your account." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        }];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 
@@ -225,6 +243,9 @@
     if ([[segue identifier] isEqualToString:@"ShowDetails"]) {
         CBEventDetailTableViewController *eventDetailVC = [segue destinationViewController];
         eventDetailVC.event = self.selectedEvent;
+    } else if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+        CBProfileViewController *profileVC = [segue destinationViewController];
+        profileVC.user = [PFUser currentUser];
     }
 }
 

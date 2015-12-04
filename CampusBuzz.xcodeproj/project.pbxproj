@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7427F3BC1BDEF9A40069732C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7427F3BB1BDEF9A40069732C /* MapKit.framework */; };
+		744582FC1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 744582FB1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.m */; };
 		745EE0911BBB0C1900854153 /* CBResetPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 745EE0901BBB0C1900854153 /* CBResetPasswordTableViewController.m */; };
 		745EE0931BBB0F1100854153 /* Events.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 745EE0921BBB0F1100854153 /* Events.storyboard */; };
 		747F7FB81BBC7BC100FC4FB9 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 747F7FB71BBC7BC100FC4FB9 /* MBProgressHUD.m */; };
@@ -36,6 +37,9 @@
 		74AF6F701BED4F3700455889 /* CBAttendeeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */; };
 		74BE4DC31BCD9C9200F5AFD4 /* SchoolColor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */; };
 		74BE4DC41BCD9C9200F5AFD4 /* SchoolList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */; };
+		74BEF4AA1BF7922400AF2554 /* NSDate+DisplayDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */; };
+		74D1C59F1C023580006D0651 /* CBProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D1C59E1C023580006D0651 /* CBProfileViewController.m */; };
+		74D1C5AE1C023C0F006D0651 /* CBSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D1C5AD1C023C0F006D0651 /* CBSettingTableViewController.m */; };
 		74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */; };
 		74D308DF1BBAE9E9008736B4 /* CBSignInTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308DD1BBAE9E9008736B4 /* CBSignInTableViewController.m */; };
 		74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D308E11BBAFC37008736B4 /* CBRegistartionTableViewController.m */; };
@@ -76,6 +80,8 @@
 
 /* Begin PBXFileReference section */
 		7427F3BB1BDEF9A40069732C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		744582FA1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPasswordChangeTableViewController.h; sourceTree = "<group>"; };
+		744582FB1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPasswordChangeTableViewController.m; sourceTree = "<group>"; };
 		745EE08F1BBB0C1900854153 /* CBResetPasswordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBResetPasswordTableViewController.h; sourceTree = "<group>"; };
 		745EE0901BBB0C1900854153 /* CBResetPasswordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBResetPasswordTableViewController.m; sourceTree = "<group>"; };
 		745EE0921BBB0F1100854153 /* Events.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Events.storyboard; sourceTree = "<group>"; };
@@ -130,6 +136,12 @@
 		74AF6F6F1BED4F3700455889 /* CBAttendeeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAttendeeTableViewCell.m; sourceTree = "<group>"; };
 		74BE4DC11BCD9C9200F5AFD4 /* SchoolColor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolColor.plist; sourceTree = "<group>"; };
 		74BE4DC21BCD9C9200F5AFD4 /* SchoolList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SchoolList.plist; sourceTree = "<group>"; };
+		74BEF4A81BF7922400AF2554 /* NSDate+DisplayDates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DisplayDates.h"; sourceTree = "<group>"; };
+		74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DisplayDates.m"; sourceTree = "<group>"; };
+		74D1C59D1C023580006D0651 /* CBProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBProfileViewController.h; sourceTree = "<group>"; };
+		74D1C59E1C023580006D0651 /* CBProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBProfileViewController.m; sourceTree = "<group>"; };
+		74D1C5AC1C023C0F006D0651 /* CBSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSettingTableViewController.h; sourceTree = "<group>"; };
+		74D1C5AD1C023C0F006D0651 /* CBSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBSettingTableViewController.m; sourceTree = "<group>"; };
 		74D308DA1BBAE9E9008736B4 /* CBRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBRootViewController.h; sourceTree = "<group>"; };
 		74D308DB1BBAE9E9008736B4 /* CBRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBRootViewController.m; sourceTree = "<group>"; };
 		74D308DC1BBAE9E9008736B4 /* CBSignInTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSignInTableViewController.h; sourceTree = "<group>"; };
@@ -226,6 +238,8 @@
 			children = (
 				747F7FC31BBF22B300FC4FB9 /* UIColor+AppColors.h */,
 				747F7FC41BBF22B300FC4FB9 /* UIColor+AppColors.m */,
+				74BEF4A81BF7922400AF2554 /* NSDate+DisplayDates.h */,
+				74BEF4A91BF7922400AF2554 /* NSDate+DisplayDates.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -304,6 +318,12 @@
 				74E04B061BEC1DB800CE3814 /* CBCommetsTableViewController.m */,
 				74E04B0C1BEC35CF00CE3814 /* CBAttendeesTableViewController.h */,
 				74E04B0D1BEC35CF00CE3814 /* CBAttendeesTableViewController.m */,
+				74D1C59D1C023580006D0651 /* CBProfileViewController.h */,
+				74D1C59E1C023580006D0651 /* CBProfileViewController.m */,
+				74D1C5AC1C023C0F006D0651 /* CBSettingTableViewController.h */,
+				74D1C5AD1C023C0F006D0651 /* CBSettingTableViewController.m */,
+				744582FA1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.h */,
+				744582FB1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -521,6 +541,7 @@
 				747F7FBB1BBDF5E700FC4FB9 /* CBEventFeedViewController.m in Sources */,
 				749FBBDC1BDBF17B001E5587 /* SDWebImagePrefetcher.m in Sources */,
 				74D308DF1BBAE9E9008736B4 /* CBSignInTableViewController.m in Sources */,
+				74D1C59F1C023580006D0651 /* CBProfileViewController.m in Sources */,
 				74D308E21BBAFC37008736B4 /* CBRegistartionTableViewController.m in Sources */,
 				749FBBD51BDBF17B001E5587 /* NSData+ImageContentType.m in Sources */,
 				74FAC8E41BBA29D300524E19 /* CBAppDelegate.m in Sources */,
@@ -528,6 +549,7 @@
 				749FBBDD1BDBF17B001E5587 /* UIButton+WebCache.m in Sources */,
 				749FBBDA1BDBF17B001E5587 /* SDWebImageDownloaderOperation.m in Sources */,
 				749FBBD41BDBF17B001E5587 /* MKAnnotationView+WebCache.m in Sources */,
+				74BEF4AA1BF7922400AF2554 /* NSDate+DisplayDates.m in Sources */,
 				749FBBD71BDBF17B001E5587 /* SDWebImageCompat.m in Sources */,
 				747F7FC51BBF22B300FC4FB9 /* UIColor+AppColors.m in Sources */,
 				749FBBDF1BDBF17B001E5587 /* UIImage+MultiFormat.m in Sources */,
@@ -538,6 +560,7 @@
 				749FBBE31BDBF17B001E5587 /* UIView+WebCacheOperation.m in Sources */,
 				747F7FC11BBF13D500FC4FB9 /* CBAddEventTableViewController.m in Sources */,
 				749FBBB01BDBD863001E5587 /* CBEventTableViewCell.m in Sources */,
+				74D1C5AE1C023C0F006D0651 /* CBSettingTableViewController.m in Sources */,
 				749FBBD91BDBF17B001E5587 /* SDWebImageDownloader.m in Sources */,
 				749FBBE11BDBF17B001E5587 /* UIImageView+HighlightedWebCache.m in Sources */,
 				749BFBBE1BDEEE8E007FE3C1 /* CBEventDetailTableViewController.m in Sources */,
@@ -545,6 +568,7 @@
 				749FBBE01BDBF17B001E5587 /* UIImage+WebP.m in Sources */,
 				74AF6F701BED4F3700455889 /* CBAttendeeTableViewCell.m in Sources */,
 				74E04B0E1BEC35CF00CE3814 /* CBAttendeesTableViewController.m in Sources */,
+				744582FC1C0D25DF0032EBC1 /* CBPasswordChangeTableViewController.m in Sources */,
 				749FBBDB1BDBF17B001E5587 /* SDWebImageManager.m in Sources */,
 				74E04B0B1BEC1DD500CE3814 /* RDRGrowingTextView.m in Sources */,
 				74D308DE1BBAE9E9008736B4 /* CBRootViewController.m in Sources */,
