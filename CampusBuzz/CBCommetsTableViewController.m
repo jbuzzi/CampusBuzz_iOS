@@ -8,12 +8,15 @@
 
 #import "CBCommetsTableViewController.h"
 #import "CBCommentTableViewCell.h"
+#import "CBProfileViewController.h"
 #import "RDRGrowingTextView.h"
 #import "MBProgressHUD.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "NSDate+DisplayDates.h"
 
 @interface CBCommetsTableViewController () <UITextViewDelegate, UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) PFUser *selectedUser;
 
 @end
 
@@ -23,6 +26,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     self.title = @"Comments";
     self.tableView.tableFooterView = [UIView new];
@@ -167,7 +172,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PFObject *comment = [self.comments objectAtIndex:indexPath.row];
+    PFUser *creator = [comment objectForKey:@"creator"];
+    self.selectedUser = creator;
     
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
 }
 
 #pragma mark - UITextViewDelegate
@@ -185,14 +194,16 @@
     return YES;
 }
 
-/*
+
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
+     if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+         CBProfileViewController *profileVC = [segue destinationViewController];
+         profileVC.user = self.selectedUser;
+     }
  }
- */
+
 
 @end

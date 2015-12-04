@@ -9,6 +9,7 @@
 #import "CBEventFeedViewController.h"
 #import "CBEventTableViewCell.h"
 #import "CBSignInTableViewController.h"
+#import "CBProfileViewController.h"
 #import "UIColor+AppColors.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBEventDetailTableViewController.h"
@@ -169,12 +170,8 @@
     }
 }
 
-- (IBAction)logOut:(id)sender {
-    [PFUser logOut];
-    
-    UIStoryboard *secondStoryBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *theTabBar = (UIViewController *)[secondStoryBoard instantiateViewControllerWithIdentifier:@"login"];
-    [self.navigationController pushViewController:theTabBar animated:YES];
+- (IBAction)userProfilePressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
 }
 
 #pragma mark - UITableViewDataSource 
@@ -246,6 +243,9 @@
     if ([[segue identifier] isEqualToString:@"ShowDetails"]) {
         CBEventDetailTableViewController *eventDetailVC = [segue destinationViewController];
         eventDetailVC.event = self.selectedEvent;
+    } else if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+        CBProfileViewController *profileVC = [segue destinationViewController];
+        profileVC.user = [PFUser currentUser];
     }
 }
 
