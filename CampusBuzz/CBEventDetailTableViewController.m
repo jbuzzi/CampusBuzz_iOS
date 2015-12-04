@@ -11,6 +11,7 @@
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "CBCommetsTableViewController.h"
 #import "CBAttendeesTableViewController.h"
+#import "CBProfileViewController.h"
 #import "UIColor+AppColors.h"
 #import "MBProgressHUD.h"
 #import <MapKit/MapKit.h>
@@ -35,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *attendeesButton;
 @property (weak, nonatomic) IBOutlet UIButton *commentsButton;
 @property (weak, nonatomic) IBOutlet UIButton *goingButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *moreBarButtonItem;
 
 @property (strong, nonatomic) NSArray *comments;
 @property (strong, nonatomic) NSArray *attendees;
@@ -43,6 +45,7 @@
 @property (assign, nonatomic) BOOL edited;
 
 @property (strong, nonatomic) PFObject *currentRSVP;
+@property (strong, nonatomic) PFUser *creator;
 
 @end
 
@@ -141,6 +144,8 @@
     self.titleLabel.text = [self.event objectForKey:@"title"];
     
     PFUser *creator = [self.event objectForKey:@"creator"];
+    self.creator = creator;
+    
     PFFile *userImageFile = [creator objectForKey:@"image"];
     [self.userImageView sd_setImageWithURL:[NSURL URLWithString:userImageFile.url]];
     self.creatorLabel.text = [NSString stringWithFormat:@"Hosted by %@ %@", [creator objectForKey: @"firstName"], [creator objectForKey: @"lastName"]];
@@ -150,6 +155,17 @@
     [dateFormat setDateFormat:@"MMMM d, yyyy 'at' h:mm a"];
     self.dateLabel.text = [dateFormat stringFromDate:date];
     
+    NSDate *today = [NSDate date];
+    NSComparisonResult result;
+    
+    result = [today compare:date];
+    if(result == NSOrderedDescending) {
+        self.goingButton.enabled = NO;
+        self.goingButton.alpha = 0.2f;
+        self.moreBarButtonItem.enabled = NO;
+        self.moreBarButtonItem.tintColor = [UIColor clearColor];
+    }
+
     self.locationLabel.text = [NSString stringWithFormat:@"%@, %@, %@ %@", [self.event objectForKey:@"address"], [self.event objectForKey:@"city"], [self.event objectForKey:@"state"], [self.event objectForKey:@"zipcode"]];
     
     PFGeoPoint *location = [self.event objectForKey:@"locationPoint"];
@@ -284,6 +300,10 @@
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
     }];
+}
+
+- (IBAction)hostPressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowUser" sender:self];
 }
 
 - (IBAction)goingPressed:(id)sender {
@@ -507,6 +527,9 @@
         CBAddEventTableViewController *addEventVC = [segue destinationViewController];
         addEventVC.event = self.event;
         addEventVC.editMode = YES;
+    } else if ([[segue identifier] isEqualToString:@"ShowUser"]) {
+        CBProfileViewController *profileVC = [segue destinationViewController];
+        profileVC.user = self.creator;
     }
 }
 
